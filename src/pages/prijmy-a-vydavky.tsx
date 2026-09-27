@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Form, FormikProps } from 'formik'
 import { BooleanRadio, FormWrapper, Input } from '../components/FormComponents'
 import { FormErrors, IncomeAndExpenseUserInput } from '../types/PageUserInputs'
@@ -9,6 +10,7 @@ import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
 import { incomeAndExpenseInitialValues } from '../lib/initialValues'
 import { Details } from '../components/Details'
+import { Translate, translateKey } from '../lib/i18n'
 
 const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
   taxFormUserInput,
@@ -17,12 +19,14 @@ const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
   nextRoute,
   previousRoute,
 }) => {
+  const t = useTranslations('IncomeAndExpenses')
+  const tc = useTranslations('Common')
   return (
     <>
       <BackLink href={previousRoute} />
       <FormWrapper<IncomeAndExpenseUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           const userInput = values.prijem_zo_zivnosti
             ? values
@@ -40,65 +44,50 @@ const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
               <Form className="form" noValidate>
                 <ErrorSummary<IncomeAndExpenseUserInput> errors={errors} />
                 <BooleanRadio
-                  title={`Mali ste v roku ${TAX_YEAR} príjmy zo živnosti na území SR?`}
+                  title={t('question', { year: TAX_YEAR })}
                   name="prijem_zo_zivnosti"
                 />
-                <Details title="Ktoré príjmy podporujeme a ktoré nie?">
+                <Details title={t('supportedTitle')}>
                   <p className="govuk-hint">
-                    Aplikácia <b>podporuje</b> prípad{' '}
-                    <b>príjmov plynúcich zo zdrojov na území SR</b>, t. j.
-                    aktívnych príjmov za činnosti vykonávané fyzicky v SR (napr.
-                    ak ste počas roka ako zamestnanec a/alebo živnostník
-                    vykonávali „prácu“ fyzicky v SR).
+                    {t.rich('supported', { b: (chunks) => <b>{chunks}</b> })}
                   </p>
                   <p className="govuk-hint">
-                    Aplikácia <b>nepodporuje</b> prípad{' '}
-                    <b>príjmov plynúcich zo zdrojov v zahraničí</b>, t. j.
-                    aktívnych príjmov za činnosti vykonávané fyzicky v zahraničí
-                    (napr. ak ste počas roka ako zamestnanec, živnostník,
-                    umelec, športovec vykonávali „prácu“ fyzicky v zahraničí) a
-                    pasívnych príjmov, ktoré vám vyplatila osoba, ktorá nie je
-                    daňovým rezidentom SR (napr. príjmy z prenájmu, predaja
-                    cenných papierov, dividend, úrokov, vytvorenia diela,
-                    licenčných poplatkov, ktoré vám vyplatila zahraničná osoba).
+                    {t.rich('notSupported', { b: (chunks) => <b>{chunks}</b> })}
                   </p>
                 </Details>
                 {values.prijem_zo_zivnosti && (
                   <>
-                    <h2 className="govuk-heading-l">
-                      Príjmy a odvody do sociálnej a zdravotnej poisťovne zo
-                      živnosti
-                    </h2>
+                    <h2 className="govuk-heading-l">{t('sectionHeading')}</h2>
 
                     <Input
                       name="t1r10_prijmy"
                       type="number"
-                      label="Príjmy"
-                      hint={`Vaše celkové príjmy prijaté na účet (zaplatené faktúry) alebo v hotovosti (napr. cez pokladňu) v roku ${TAX_YEAR}. Uvádzajte iba príjmy zo živnosti.`}
+                      label={t('incomeLabel')}
+                      hint={t('incomeHint', { year: TAX_YEAR })}
                     />
                     <Input
                       name="priloha3_r11_socialne"
                       type="number"
-                      label="Sociálne poistenie"
-                      hint={`Celkové uhradené poistné v roku ${TAX_YEAR}. Uveďte všetky platby zaplatené v ${TAX_YEAR} - napr. aj nedoplatky za predchádzajúce roky.`}
+                      label={t('socialLabel')}
+                      hint={t('socialHint', { year: TAX_YEAR })}
                     />
                     <Input
                       name="priloha3_r13_zdravotne"
-                      hint={`Celkové uhradené poistné v roku ${TAX_YEAR}. Uveďte všetky platby zaplatené v ${TAX_YEAR} - napr. aj nedoplatky za predchádzajúci rok.`}
+                      hint={t('healthHint', { year: TAX_YEAR })}
                       type="number"
-                      label="Zdravotné poistenie"
+                      label={t('healthLabel')}
                     />
                     <Input
                       name="zaplatenePreddavky"
-                      hint={`Celkové uhradené preddavky na daň z príjmov v roku ${TAX_YEAR}. Ak ste v roku ${TAX_YEAR} neplatili žiadne preddavky, uveďte 0.`}
+                      hint={t('advancesHint', { year: TAX_YEAR })}
                       type="number"
-                      label="Zaplatené preddavky"
+                      label={t('advancesLabel')}
                     />
                   </>
                 )}
 
                 <button data-test="next" className="govuk-button" type="submit">
-                  Pokračovať
+                  {tc('continue')}
                 </button>
               </Form>
             </>
@@ -109,54 +98,52 @@ const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
   )
 }
 
-export const validate = (values: IncomeAndExpenseUserInput) => {
+export const validate = (
+  values: IncomeAndExpenseUserInput,
+  t: Translate = translateKey,
+) => {
   const errors: Partial<FormErrors<IncomeAndExpenseUserInput>> = {}
 
   if (typeof values.prijem_zo_zivnosti === 'undefined') {
-    errors.prijem_zo_zivnosti = 'Vyznačte odpoveď'
+    errors.prijem_zo_zivnosti = t('errorSelectAnswer')
   }
 
   if (values.prijem_zo_zivnosti) {
     if (!values.t1r10_prijmy) {
-      errors.t1r10_prijmy = 'Zadajte vaše celkové príjmy'
+      errors.t1r10_prijmy = t('errorIncome')
     }
     if (values.t1r10_prijmy && !values.t1r10_prijmy.match(numberInputRegexp)) {
-      errors.t1r10_prijmy = 'Zadajte sumu príjmov vo formáte 123,45'
+      errors.t1r10_prijmy = t('errorIncomeFormat')
     }
 
     if (!values.priloha3_r11_socialne) {
-      errors.priloha3_r11_socialne =
-        'Zadajte vaše celkové uhradené sociálne poistné'
+      errors.priloha3_r11_socialne = t('errorSocial')
     }
     if (
       values.priloha3_r11_socialne &&
       !values.priloha3_r11_socialne.match(numberInputRegexp)
     ) {
-      errors.priloha3_r11_socialne =
-        'Zadajte sumu sociálneho poistenia vo formáte 123,45'
+      errors.priloha3_r11_socialne = t('errorSocialFormat')
     }
 
     if (!values.priloha3_r13_zdravotne) {
-      errors.priloha3_r13_zdravotne =
-        'Zadajte vaše celkové uhradené zdravotné poistné'
+      errors.priloha3_r13_zdravotne = t('errorHealth')
     }
     if (
       values.priloha3_r13_zdravotne &&
       !values.priloha3_r13_zdravotne.match(numberInputRegexp)
     ) {
-      errors.priloha3_r13_zdravotne =
-        'Zadajte sumu zdravotného poistenia vo formáte 123,45'
+      errors.priloha3_r13_zdravotne = t('errorHealthFormat')
     }
 
     if (!values.zaplatenePreddavky) {
-      errors.zaplatenePreddavky = 'Zadajte vaše zaplatené preddavky'
+      errors.zaplatenePreddavky = t('errorAdvances')
     }
     if (
       values.zaplatenePreddavky &&
       !values.zaplatenePreddavky.match(numberInputRegexp)
     ) {
-      errors.zaplatenePreddavky =
-        'Zadajte vaše zaplatené preddavky vo formáte 123,45'
+      errors.zaplatenePreddavky = t('errorAdvancesFormat')
     }
   }
 

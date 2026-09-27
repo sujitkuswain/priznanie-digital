@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react'
+import { ErrorPrefix } from '../FormComponents'
 
 interface Props {
   readonly title: string
@@ -20,7 +21,7 @@ const Fieldset = ({
       {hint && <span className="govuk-hint">{hint}</span>}
       {error && (
         <span data-test="error" className="govuk-error-message">
-          <span className="govuk-visually-hidden">Chyba:</span> {error}
+          <ErrorPrefix /> {error}
         </span>
       )}
       {children}

@@ -1,4 +1,5 @@
 import { Form } from 'formik'
+import { useTranslations } from 'next-intl'
 import { BooleanRadio, FormWrapper, Input } from '../components/FormComponents'
 import { EmployedUserInput, FormErrors } from '../types/PageUserInputs'
 import { numberInputRegexp } from '../lib/utils'
@@ -9,6 +10,7 @@ import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
 import TooltipHint from '../components/TooltipHint'
 import styles from './zamestnanie.module.css'
+import { Translate, translateKey } from '../lib/i18n'
 
 const Zamestnanie: Page<EmployedUserInput> = ({
   setTaxFormUserInput,
@@ -17,12 +19,14 @@ const Zamestnanie: Page<EmployedUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('Employment')
+  const tc = useTranslations('Common')
   return (
     <>
       <BackLink href={previousRoute} />
       <FormWrapper<EmployedUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           const userInput = values.employed
             ? values
@@ -38,25 +42,20 @@ const Zamestnanie: Page<EmployedUserInput> = ({
           <Form className="form" noValidate>
             <ErrorSummary<EmployedUserInput> errors={errors} />
             <BooleanRadio
-              title={`Mali ste v roku ${TAX_YEAR} príjmy zo zamestnania v SR?`}
+              title={t('question', { year: TAX_YEAR })}
               name="employed"
             />
             {values.employed && (
               <>
-                <h3 className="govuk-heading-m">
-                  Nasledujúce hodnoty nájdete na tlačive &quot;Potvrdenie o
-                  zdaniteľných príjmoch fyzickej osoby zo závislej
-                  činnosti&quot;. Ak ste mali viac zamestnávateľov, tak tieto
-                  sumy spočítajte a uveďte výsledné.
-                </h3>
+                <h3 className="govuk-heading-m">{t('documentIntro')}</h3>
                 <Input
                   name="uhrnPrijmovOdVsetkychZamestnavatelov"
                   type="number"
-                  label="Úhrn vyplatených zdaniteľných príjmov"
+                  label={t('incomeLabel')}
                   hint={
                     <div>
                       <span className={styles.hintText}>
-                        Tento údaj nájdete v riadku 01.
+                        {t('rowHint', { row: '01' })}
                       </span>
                       <TooltipHint>
                         <img
@@ -71,11 +70,11 @@ const Zamestnanie: Page<EmployedUserInput> = ({
                 <Input
                   name="uhrnPovinnehoPoistnehoNaSocialnePoistenie"
                   type="number"
-                  label="Úhrn sociálneho poistného"
+                  label={t('socialLabel')}
                   hint={
                     <div>
                       <span className={styles.hintText}>
-                        Tento údaj nájdete v riadku 02a.
+                        {t('rowHint', { row: '02a' })}
                       </span>
                       <TooltipHint>
                         <img
@@ -90,11 +89,11 @@ const Zamestnanie: Page<EmployedUserInput> = ({
                 <Input
                   name="uhrnPovinnehoPoistnehoNaZdravotnePoistenie"
                   type="number"
-                  label="Úhrn zdravotného poistného"
+                  label={t('healthLabel')}
                   hint={
                     <div>
                       <span className={styles.hintText}>
-                        Tento údaj nájdete v riadku 02b.
+                        {t('rowHint', { row: '02b' })}
                       </span>
                       <TooltipHint>
                         <img
@@ -109,11 +108,11 @@ const Zamestnanie: Page<EmployedUserInput> = ({
                 <Input
                   name="uhrnPreddavkovNaDan"
                   type="number"
-                  label="Úhrn preddavkov na daň"
+                  label={t('advancesLabel')}
                   hint={
                     <div>
                       <span className={styles.hintText}>
-                        Tento údaj nájdete v riadku 04.
+                        {t('rowHint', { row: '04' })}
                       </span>
                       <TooltipHint>
                         <img
@@ -128,12 +127,11 @@ const Zamestnanie: Page<EmployedUserInput> = ({
                 <Input
                   name="udajeODanovomBonuseNaDieta"
                   type="number"
-                  label="Údaje o daňovom bonuse na dieťa"
+                  label={t('childBonusLabel')}
                   hint={
                     <div>
                       <span className={styles.hintText}>
-                        Tento údaj nájdete v riadku 13 v časti &quot;Úhrnná suma
-                        priznaného a vyplateného daňového bonusu&quot;.
+                        {t('childBonusHint')}
                       </span>
                       <TooltipHint>
                         <img
@@ -148,7 +146,7 @@ const Zamestnanie: Page<EmployedUserInput> = ({
               </>
             )}
             <button data-test="next" className="govuk-button" type="submit">
-              Pokračovať
+              {tc('continue')}
             </button>
           </Form>
         )}
@@ -157,59 +155,53 @@ const Zamestnanie: Page<EmployedUserInput> = ({
   )
 }
 
-export const validate = (values: EmployedUserInput) => {
+export const validate = (
+  values: EmployedUserInput,
+  t: Translate = translateKey,
+) => {
   const errors: Partial<FormErrors<EmployedUserInput>> = {}
 
   if (typeof values.employed === 'undefined') {
-    errors.employed = 'Vyznačte odpoveď'
+    errors.employed = t('errorSelectAnswer')
   }
 
   if (values.employed) {
     if (!values.uhrnPrijmovOdVsetkychZamestnavatelov) {
-      errors.uhrnPrijmovOdVsetkychZamestnavatelov =
-        'Zadajte úhrn príjmov od všetkých zamestnávateľov'
+      errors.uhrnPrijmovOdVsetkychZamestnavatelov = t('errorIncome')
     } else if (
       !values.uhrnPrijmovOdVsetkychZamestnavatelov.match(numberInputRegexp)
     ) {
-      errors.uhrnPrijmovOdVsetkychZamestnavatelov =
-        'Zadajte sumu príjmov vo formáte 123,45'
+      errors.uhrnPrijmovOdVsetkychZamestnavatelov = t('errorIncomeFormat')
     }
 
     if (!values.uhrnPovinnehoPoistnehoNaSocialnePoistenie) {
-      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenie =
-        'Zadajte úhrn sociálneho poistného'
+      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenie = t('errorSocial')
     } else if (
       !values.uhrnPovinnehoPoistnehoNaSocialnePoistenie.match(numberInputRegexp)
     ) {
-      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenie =
-        'Zadajte sumu sociálneho poistného vo formáte 123,45'
+      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenie = t('errorSocialFormat')
     }
 
     if (!values.uhrnPovinnehoPoistnehoNaZdravotnePoistenie) {
-      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenie =
-        'Zadajte úhrn zdravotného poistného'
+      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenie = t('errorHealth')
     } else if (
       !values.uhrnPovinnehoPoistnehoNaZdravotnePoistenie.match(
         numberInputRegexp,
       )
     ) {
-      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenie =
-        'Zadajte sumu zdravotného poistného vo formáte 123,45'
+      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenie = t('errorHealthFormat')
     }
 
     if (!values.uhrnPreddavkovNaDan) {
-      errors.uhrnPreddavkovNaDan = 'Zadajte úhrn preddavkov na daň'
+      errors.uhrnPreddavkovNaDan = t('errorAdvances')
     } else if (!values.uhrnPreddavkovNaDan.match(numberInputRegexp)) {
-      errors.uhrnPreddavkovNaDan =
-        'Zadajte sumu povinného poistného vo formáte 123,45'
+      errors.uhrnPreddavkovNaDan = t('errorAdvancesFormat')
     }
 
     if (!values.udajeODanovomBonuseNaDieta) {
-      errors.udajeODanovomBonuseNaDieta =
-        'Zadajte údaje o daňovom bonuse na dieťa'
+      errors.udajeODanovomBonuseNaDieta = t('errorChildBonus')
     } else if (!values.udajeODanovomBonuseNaDieta.match(numberInputRegexp)) {
-      errors.udajeODanovomBonuseNaDieta =
-        'Zadajte sumu povinného poistného vo formáte 123,45'
+      errors.udajeODanovomBonuseNaDieta = t('errorChildBonusFormat')
     }
   }
 

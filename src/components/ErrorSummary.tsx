@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormikErrors } from 'formik'
+import { useTranslations } from 'next-intl'
 
 interface ErrorItemProps {
   name: string
@@ -19,6 +20,7 @@ interface ErrorSummaryProps<Values> {
 }
 
 export function ErrorSummary<Values>({ errors }: ErrorSummaryProps<Values>) {
+  const t = useTranslations('Common')
   const errorEntries = Object.entries(errors)
 
   const shouldShowErrorSummary = errorEntries.length !== 0
@@ -32,7 +34,7 @@ export function ErrorSummary<Values>({ errors }: ErrorSummaryProps<Values>) {
       data-module="govuk-error-summary"
     >
       <h2 className="govuk-error-summary__title" id="error-summary-title">
-        Vyskytol sa problém
+        {t('errorSummaryTitle')}
       </h2>
       <div className="govuk-error-summary__body">
         <ul className="govuk-list govuk-error-summary__list">

@@ -7,8 +7,14 @@ import {
   FormikValues,
 } from 'formik'
 import classnames from 'classnames'
+import { useTranslations } from 'next-intl'
 import { UserInput } from '../types/UserInput'
 import { numberInputRegexp } from '../lib/utils'
+
+export const ErrorPrefix = () => {
+  const t = useTranslations('Common')
+  return <span className="govuk-visually-hidden">{t('errorPrefix')}</span>
+}
 
 /**
  * Utility type that generates dot-notation paths for nested objects.
@@ -115,7 +121,7 @@ export const Input = <Name extends UserInputFieldName>({
           data-test="error"
           className="govuk-error-message"
         >
-          <span className="govuk-visually-hidden">Chyba:</span> {meta.error}
+          <ErrorPrefix /> {meta.error}
         </span>
       ) : null}
       <input
@@ -151,6 +157,7 @@ export const BooleanRadio = <Name extends keyof UserInput>({
   ...props
 }: BooleanRadioProps<Name>) => {
   const [field, meta, helpers] = useField(props.name)
+  const t = useTranslations('Common')
 
   return (
     <div
@@ -167,7 +174,7 @@ export const BooleanRadio = <Name extends keyof UserInput>({
         {hint ? <span className="govuk-hint">{hint}</span> : null}
         {meta.error ? (
           <span data-test="error" className="govuk-error-message">
-            <span className="govuk-visually-hidden">Chyba:</span> {meta.error}
+            <ErrorPrefix /> {meta.error}
           </span>
         ) : null}
         <div className="govuk-radios">
@@ -190,7 +197,7 @@ export const BooleanRadio = <Name extends keyof UserInput>({
               className="govuk-label govuk-radios__label"
               htmlFor={`${props.name}-input-yes`}
             >
-              Áno
+              {t('yes')}
             </label>
           </div>
           <div className="govuk-radios__item">
@@ -212,7 +219,7 @@ export const BooleanRadio = <Name extends keyof UserInput>({
               className="govuk-label govuk-radios__label"
               htmlFor={`${props.name}-input-no`}
             >
-              Nie
+              {t('no')}
             </label>
           </div>
         </div>
@@ -250,7 +257,7 @@ export const Checkbox = ({
     >
       {meta.error ? (
         <span id={name} className="govuk-error-message">
-          <span className="govuk-visually-hidden">Chyba:</span> {meta.error}
+          <ErrorPrefix /> {meta.error}
         </span>
       ) : null}
       <div className={classnames(['govuk-checkboxes__item', className])}>
@@ -323,7 +330,7 @@ export const Select = ({
       <span className="govuk-hint">{hint}</span>
       {meta.error ? (
         <span id={name} data-test="error" className="govuk-error-message">
-          <span className="govuk-visually-hidden">Chyba:</span> {meta.error}
+          <ErrorPrefix /> {meta.error}
         </span>
       ) : null}
       <select
