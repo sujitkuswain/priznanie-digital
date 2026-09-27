@@ -184,6 +184,10 @@ const executeTestCase = (testCase: string) => {
             }
           })
           next()
+          // wait until either the bonus question or the next page is shown, reading the url right away is racy
+          cy.get(
+            '[data-test="partner_bonus_na_deti_chce_uplatnit-input-no"], [data-test="platil_prispevky_na_dochodok-input-yes"]',
+          )
           cy.url().then((url) => {
             if (input.partner_bonus_na_deti) {
               getInput('partner_bonus_na_deti_chce_uplatnit', '-yes').click()
