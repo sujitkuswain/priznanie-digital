@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { BooleanRadio, Input } from './FormComponents'
 import { formatCurrency } from '../lib/utils'
 import { Details } from './Details'
@@ -13,231 +14,239 @@ interface Props {
   disabled?: boolean
 }
 
-export const ApplyForBonusQuestion = ({ disabled = false }: Props) => (
-  <>
-    <BooleanRadio
-      title={`Splácali ste v roku ${TAX_YEAR} úver na bývanie, ktorý bol uzavretý po roku ${TAX_YEAR - UROKY_POCET_ROKOV}?`}
-      name="r035_uplatnuje_uroky"
-      hint="Nárok vzniká, ak ste v čase podania žiadosti o úver mali najmenej 18 a najviac 35 rokov a spĺňate ďalšie podmienky uvedené nižšie."
-      disabled={disabled}
-    />
-    <Details title="Kedy si môžem uplatniť zvýhodnenie?">
-      <>
-        <p>Daňový bonus na zaplatené úroky si môžete uplatniť na úver, ktorý</p>
-        <ul>
-          <li>má dobu splatnosti najmenej 5 rokov a najviac 30 rokov</li>
-          <li>je zabezpečený záložným právom k tuzemskej nehnuteľnosti</li>
-          <li>nedošlo v roku {TAX_YEAR} k refinancovaniu úveru</li>
-          <li>nedošlo v roku {TAX_YEAR} k zosplatneniu úveru</li>
-        </ul>
-      </>
-    </Details>
-  </>
-)
+export const ApplyForBonusQuestion = ({ disabled = false }: Props) => {
+  const t = useTranslations('Mortgage')
+  return (
+    <>
+      <BooleanRadio
+        title={t('question', {
+          year: TAX_YEAR,
+          since: TAX_YEAR - UROKY_POCET_ROKOV,
+        })}
+        name="r035_uplatnuje_uroky"
+        hint={t('questionHint')}
+        disabled={disabled}
+      />
+      <Details title={t('whenTitle')}>
+        <>
+          <p>{t('whenIntro')}</p>
+          <ul>
+            <li>{t('whenMaturity')}</li>
+            <li>{t('whenSecured')}</li>
+            <li>{t('whenNotRefinanced', { year: TAX_YEAR })}</li>
+            <li>{t('whenNotAccelerated', { year: TAX_YEAR })}</li>
+          </ul>
+        </>
+      </Details>
+    </>
+  )
+}
 
-export const ZaplateneUrokyQuestion = ({ disabled }) => (
-  <>
-    <Input
-      name="r035_zaplatene_uroky"
-      type="number"
-      label={`Aká bola výška zaplatených úrokov v roku ${TAX_YEAR} na základe potvrdenia vydaného bankou?`}
-      disabled={disabled}
-    />
-    <Warning>
-      Potvrdenie vydané veriteľom (bankou) je potrebné priložiť ako prílohu k
-      daňovému priznaniu.
-    </Warning>
-  </>
-)
+export const ZaplateneUrokyQuestion = ({ disabled }) => {
+  const t = useTranslations('Mortgage')
+  return (
+    <>
+      <Input
+        name="r035_zaplatene_uroky"
+        type="number"
+        label={t('paidInterestLabel', { year: TAX_YEAR })}
+        disabled={disabled}
+      />
+      <Warning>{t('paidInterestWarning')}</Warning>
+    </>
+  )
+}
 
-export const ZaciatokUveruQuestion = ({ disabled, values }) => (
-  <div className="govuk-form-group">
-    <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h1 className="govuk-fieldset__heading">
-        Ak si chcete uplatniť daňový bonus na zaplatené úroky z úveru na bývanie
-        uveďte:
-      </h1>
-    </legend>
-    <p className="govuk-hint">
-      Daňovník si môže uplatniť daňový bonus na zaplatené úroky počas piatich po
-      sebe nasledujúcich rokov, a to od mesiaca, v ktorom sa úver na bývanie
-      začal úročiť.
-    </p>
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label className="govuk-label govuk-!-font-weight-bold">
-      Dátum uzavretia zmluvy o úvere na bývanie
-    </label>
+export const ZaciatokUveruQuestion = ({ disabled, values }) => {
+  const t = useTranslations('Mortgage')
+  return (
     <div className="govuk-form-group">
-      <fieldset
-        className="govuk-fieldset"
-        role="group"
-        aria-describedby="zmluva-uzatvorenie-hint"
-      >
-        <div id="zmluva-uzatvorenie-hint" className="govuk-hint">
-          Zadajte dátum uzavretia zmluvy napríklad
-          <br />
-          14 5 {TAX_YEAR - 3}
-        </div>
-        <div className="govuk-date-input" id="zmluva-uzatvorenie-zaciatok">
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zmluva_den_uzatvorenia"
-                label="Deň"
-                type="number"
-                width={2}
-                disabled={disabled}
-              />
+      <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 className="govuk-fieldset__heading">{t('datesHeading')}</h1>
+      </legend>
+      <p className="govuk-hint">{t('datesHint')}</p>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label className="govuk-label govuk-!-font-weight-bold">
+        {t('contractDateLabel')}
+      </label>
+      <div className="govuk-form-group">
+        <fieldset
+          className="govuk-fieldset"
+          role="group"
+          aria-describedby="zmluva-uzatvorenie-hint"
+        >
+          <div id="zmluva-uzatvorenie-hint" className="govuk-hint">
+            {t('contractDateHint')}
+            <br />
+            14 5 {TAX_YEAR - 3}
+          </div>
+          <div className="govuk-date-input" id="zmluva-uzatvorenie-zaciatok">
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zmluva_den_uzatvorenia"
+                  label={t('day')}
+                  type="number"
+                  width={2}
+                  disabled={disabled}
+                />
+              </div>
+            </div>
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zmluva_mesiac_uzatvorenia"
+                  label={t('month')}
+                  type="number"
+                  width={2}
+                  disabled={disabled}
+                />
+              </div>
+            </div>
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zmluva_rok_uzatvorenia"
+                  type="number"
+                  label={t('year')}
+                  width={4}
+                  disabled={disabled}
+                />
+              </div>
             </div>
           </div>
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zmluva_mesiac_uzatvorenia"
-                label="Mesiac"
-                type="number"
-                width={2}
-                disabled={disabled}
-              />
+        </fieldset>
+      </div>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label className="govuk-label govuk-!-font-weight-bold">
+        {t('interestStartLabel')}
+      </label>
+      <div className="govuk-form-group">
+        <fieldset
+          className="govuk-fieldset"
+          role="group"
+          aria-describedby="zaciatok-urocenia-hint"
+        >
+          <div id="zaciatok-urocenia-hint" className="govuk-hint">
+            {t('interestStartHint')}
+            <br />
+            27 8 {TAX_YEAR - 3}
+          </div>
+          <div className="govuk-date-input" id="zaciatok-prijmov">
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zaciatok_urocenia_den"
+                  label={t('day')}
+                  type="number"
+                  width={2}
+                  disabled={disabled}
+                />
+              </div>
+            </div>
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zaciatok_urocenia_mesiac"
+                  label={t('month')}
+                  type="number"
+                  width={2}
+                  disabled={disabled}
+                />
+              </div>
+            </div>
+            <div className="govuk-date-input__item">
+              <div className="govuk-form-group">
+                <Input
+                  name="uroky_zaciatok_urocenia_rok"
+                  type="number"
+                  label={t('year')}
+                  width={4}
+                  disabled={disabled}
+                />
+              </div>
             </div>
           </div>
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zmluva_rok_uzatvorenia"
-                type="number"
-                label="Rok"
-                width={4}
-                disabled={disabled}
-              />
-            </div>
-          </div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
+      {parseInt(values.uroky_zmluva_rok_uzatvorenia, 10) >= 2024 && (
+        <Warning>{t('ownHousingWarning')}</Warning>
+      )}
     </div>
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label className="govuk-label govuk-!-font-weight-bold">
-      Dátum začatia úročenia úveru
-    </label>
-    <div className="govuk-form-group">
-      <fieldset
-        className="govuk-fieldset"
-        role="group"
-        aria-describedby="zaciatok-urocenia-hint"
-      >
-        <div id="zaciatok-urocenia-hint" className="govuk-hint">
-          Zadajte dátum začatia úročenia úveru napríklad
-          <br />
-          27 8 {TAX_YEAR - 3}
-        </div>
-        <div className="govuk-date-input" id="zaciatok-prijmov">
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zaciatok_urocenia_den"
-                label="Deň"
-                type="number"
-                width={2}
-                disabled={disabled}
-              />
-            </div>
-          </div>
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zaciatok_urocenia_mesiac"
-                label="Mesiac"
-                type="number"
-                width={2}
-                disabled={disabled}
-              />
-            </div>
-          </div>
-          <div className="govuk-date-input__item">
-            <div className="govuk-form-group">
-              <Input
-                name="uroky_zaciatok_urocenia_rok"
-                type="number"
-                label="Rok"
-                width={4}
-                disabled={disabled}
-              />
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-    {parseInt(values.uroky_zmluva_rok_uzatvorenia, 10) >= 2024 && (
-      <Warning>
-        Úver musí byť určený na byt alebo rodinný dom slúžiaci výlučne k
-        vlastnému trvalému bývaniu alebo k vlastnému trvalému bývaniu spolu s
-        blízkymi osobami.
-      </Warning>
-    )}
-  </div>
-)
+  )
+}
 
 export const DalsiDlzniciQuestion = ({
   values,
   errors,
   setFieldValue,
   disabled,
-}) => (
-  <Fieldset
-    title={`Ste dlžníkom zo zmluvy o úvere na bývanie spolu s inými dlžníkmi?`}
-    hint="Nárok na daňový bonus na zaplatené úroky má možnosť uplatniť len jeden z dlžníkov."
-    error={errors.uroky_dalsi_dlznik}
-  >
-    <RadioGroup
-      value={String(values.uroky_dalsi_dlznik)}
-      onChange={(value) => {
-        setFieldValue('uroky_dalsi_dlznik', value === 'true')
-      }}
+}) => {
+  const t = useTranslations('Mortgage')
+  const tc = useTranslations('Common')
+  return (
+    <Fieldset
+      title={t('coDebtorsQuestion')}
+      hint={t('coDebtorsHint')}
+      error={errors.uroky_dalsi_dlznik}
     >
-      <Radio
-        name="uroky_dalsi_dlznik-input-yes"
-        label="Áno"
-        value="true"
-        disabled={disabled}
-      />
-      <RadioConditional forValue="true">
-        <Input
-          name="uroky_pocet_dlznikov"
-          type="number"
-          label="Počet dlžníkov zo zmluvy o úvere"
-          hint="Uveďte počet dlžníkov spolu s vami"
-          width={4}
+      <RadioGroup
+        value={String(values.uroky_dalsi_dlznik)}
+        onChange={(value) => {
+          setFieldValue('uroky_dalsi_dlznik', value === 'true')
+        }}
+      >
+        <Radio
+          name="uroky_dalsi_dlznik-input-yes"
+          label={tc('yes')}
+          value="true"
           disabled={disabled}
         />
-      </RadioConditional>
+        <RadioConditional forValue="true">
+          <Input
+            name="uroky_pocet_dlznikov"
+            type="number"
+            label={t('debtorsCountLabel')}
+            hint={t('debtorsCountHint')}
+            width={4}
+            disabled={disabled}
+          />
+        </RadioConditional>
 
-      <Radio
-        name="uroky_dalsi_dlznik-input-no"
-        label="Nie"
-        value="false"
-        disabled={disabled}
-      />
-    </RadioGroup>
-  </Fieldset>
-)
+        <Radio
+          name="uroky_dalsi_dlznik-input-no"
+          label={tc('no')}
+          value="false"
+          disabled={disabled}
+        />
+      </RadioGroup>
+    </Fieldset>
+  )
+}
 
-export const DalsiUverQuestion = ({ disabled }) => (
-  <BooleanRadio
-    name="uroky_dalsi_uver_uplatnuje"
-    title="Ste dlžníkom / spoludlžníkom aj v inej zmluve o úvere na bývanie, na ktorú sa uplatňuje nárok na daňový bonus na zaplatené úroky?"
-    disabled={disabled}
-  />
-)
+export const DalsiUverQuestion = ({ disabled }) => {
+  const t = useTranslations('Mortgage')
+  return (
+    <BooleanRadio
+      name="uroky_dalsi_uver_uplatnuje"
+      title={t('otherLoanQuestion')}
+      disabled={disabled}
+    />
+  )
+}
 
-export const VekQuestion = ({ disabled, values: { uroky_dalsi_dlznik } }) => (
-  <BooleanRadio
-    name="uroky_splnam_vek_kriteria"
-    title={`Mali ste ku dňu podania žiadosti o úver ${
-      uroky_dalsi_dlznik ? '(aj všetci spoludlžníci) ' : ''
-    }najmenej 18 a najviac 35 rokov?`}
-    disabled={disabled}
-  />
-)
+export const VekQuestion = ({ disabled, values: { uroky_dalsi_dlznik } }) => {
+  const t = useTranslations('Mortgage')
+  return (
+    <BooleanRadio
+      name="uroky_splnam_vek_kriteria"
+      title={
+        uroky_dalsi_dlznik ? t('ageQuestionWithCoDebtors') : t('ageQuestion')
+      }
+      disabled={disabled}
+    />
+  )
+}
 
 const maxPrijem = ({
   uroky_zmluva_rok_uzatvorenia: rok,
@@ -275,6 +284,7 @@ export const PrijemQuestion = ({
     uroky_pocet_dlznikov,
   },
 }) => {
+  const t = useTranslations('Mortgage')
   const prijem = formatCurrency(
     maxPrijem({
       uroky_zmluva_rok_uzatvorenia,
@@ -282,43 +292,54 @@ export const PrijemQuestion = ({
       uroky_dalsi_dlznik,
     }).toNumber(),
   )
+  const params = {
+    year: parseInt(uroky_zmluva_rok_uzatvorenia) - 1,
+    amount: prijem,
+  }
 
   return (
     <BooleanRadio
       name="uroky_splnam_prijem"
-      title={`Bol váš priemerný mesačný príjem ${
-        uroky_dalsi_dlznik ? '(spolu so spoludlžníkmi) ' : ''
-      }za kalendárny rok ${
-        parseInt(uroky_zmluva_rok_uzatvorenia) - 1
-      } max. vo výške ${prijem}?`}
+      title={
+        uroky_dalsi_dlznik
+          ? t('incomeQuestionWithCoDebtors', params)
+          : t('incomeQuestion', params)
+      }
       disabled={disabled}
     />
   )
 }
 
-export const NotEligible = () => (
-  <div data-test="ineligible-message">
-    <h1 className="govuk-heading-l govuk-!-margin-top-3">
-      Nemáte nárok na uplatnenie
-    </h1>
-    <p>
-      Nespĺňate podmienky pre uplatnenie daňového bonusu na zaplatené úroky.
-    </p>
-  </div>
-)
+export const NotEligible = () => {
+  const t = useTranslations('Mortgage')
+  return (
+    <div data-test="ineligible-message">
+      <h1 className="govuk-heading-l govuk-!-margin-top-3">
+        {t('notEligibleHeading')}
+      </h1>
+      <p>{t('notEligibleText')}</p>
+    </div>
+  )
+}
 
-export const PreviousButton = ({ onClick }) => (
-  <button
-    className="govuk-button btn-secondary"
-    type="button"
-    onClick={onClick}
-  >
-    Späť
-  </button>
-)
+export const PreviousButton = ({ onClick }) => {
+  const t = useTranslations('Common')
+  return (
+    <button
+      className="govuk-button btn-secondary"
+      type="button"
+      onClick={onClick}
+    >
+      {t('back')}
+    </button>
+  )
+}
 
-export const SubmitButton = () => (
-  <button className="govuk-button" type="submit">
-    Pokračovať
-  </button>
-)
+export const SubmitButton = () => {
+  const t = useTranslations('Common')
+  return (
+    <button className="govuk-button" type="submit">
+      {t('continue')}
+    </button>
+  )
+}
