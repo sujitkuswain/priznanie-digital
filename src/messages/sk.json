@@ -537,5 +537,12 @@
       "mesačne": "mesačne",
       "neplatí": "neplatí"
     }
+  },
+  "Continue": {
+    "heading": "Vaše daňové priznanie je pripravené",
+    "intro": "Stiahnite si súbor XML s daňovým priznaním.",
+    "downloadXml": "Stiahnuť XML",
+    "sessionExpired": "Vaša session vypršala",
+    "startAgain": "Začnite znovu"
   }
 }

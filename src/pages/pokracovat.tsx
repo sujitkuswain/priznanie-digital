@@ -1,5 +1,8 @@
 import React from 'react'
 import getConfig from 'next/config'
+import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
+import fileDownload from 'js-file-download'
 import { Page } from '../components/Page'
 import { TaxForm } from '../types/TaxForm'
 import { convertToXML } from '../lib/xml/xmlConverter'
@@ -79,7 +82,49 @@ const buildFields = (taxForm: TaxForm): RedirectField[] => {
   ]
 }
 
+// English users get the XML directly instead of the Slovak-only Návody.Digital guide
+const DownloadXml = ({ taxForm, canContinue }) => {
+  const t = useTranslations('Continue')
+
+  if (!canContinue) {
+    return (
+      <div className="govuk-!-margin-top-6">
+        <p>{t('sessionExpired')}</p>
+        <Link href="/" className="govuk-button">
+          {t('startAgain')}
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <h1 className="govuk-heading-l govuk-!-margin-top-3">{t('heading')}</h1>
+      <p>{t('intro')}</p>
+      <button
+        type="button"
+        className="govuk-button"
+        data-test="download-xml"
+        onClick={() => fileDownload(buildXml(taxForm), 'danove-priznanie.xml')}
+      >
+        {t('downloadXml')}
+      </button>
+    </>
+  )
+}
+
 const ContinuePage: Page = ({ taxForm, taxFormUserInput, isDebug }) => {
+  const locale = useLocale()
+
+  if (locale === 'en') {
+    return (
+      <DownloadXml
+        taxForm={taxForm}
+        canContinue={!!taxFormUserInput.r004_priezvisko}
+      />
+    )
+  }
+
   return (
     <RedirectForm
       isDebug={isDebug}

@@ -537,5 +537,12 @@
       "mesačne": "monthly",
       "neplatí": "not applicable"
     }
+  },
+  "Continue": {
+    "heading": "Your tax return is ready",
+    "intro": "Download the XML file with your tax return.",
+    "downloadXml": "Download XML",
+    "sessionExpired": "Your session has expired",
+    "startAgain": "Start again"
   }
 }
