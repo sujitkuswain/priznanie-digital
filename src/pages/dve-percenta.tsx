@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Form, FormikProps } from 'formik'
 import { Checkbox, FormWrapper, Input } from '../components/FormComponents'
 import { FormErrors, TwoPercentUserInput } from '../types/PageUserInputs'
@@ -24,6 +25,7 @@ import Radio from '../components/radio/Radio'
 import RadioConditional from '../components/radio/RadioConditional'
 import Fieldset from '../components/fieldset/Fieldset'
 import { ExternalLink } from '../components/ExternalLink'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const makeHandleOrganisationAutoform = ({
   setValues,
@@ -38,45 +40,44 @@ const makeHandleOrganisationAutoform = ({
   }
 }
 
-const TriPercenta = ({ calculatedTax }) => (
-  <>
-    <Checkbox
-      name="splnam3per"
-      label={`spĺňam podmienky na poukázanie 3% z dane (${formatCurrency(
-        calculatedTax.suma_3_percenta.toNumber(),
-      )})`}
-    />
-    <Details title="Kto môže poukázať 3% z dane?">
-      <p className="govuk-hint">
-        Ak ste v predchádzajúcom roku odpracovali viac ako 40 hodín
-        dobrovoľníckej činnosti, môže vám organizácia, pre ktorú ste túto
-        dobrovoľnícku činnosť vykonávali, vystaviť{' '}
-        <strong>
-          Potvrdenie o odpracovaní minimálne 40 hodín dobrovoľníckych aktivít
-        </strong>
-        .
-      </p>
-      <p className="govuk-hint">
-        Svoje 3% dane možete darovať ktorejkoľvek príspevkovej organizácii.
-        Nemusíte ich darovať organizácii, v ktorej ste daných 40 hodín
-        odpracovali.
-      </p>
-      <p className="govuk-hint">
-        Potvrdenie je nutné priložiť k daňovému priznaniu.
-      </p>
-    </Details>
-  </>
+const supportLink = (chunks) => (
+  <ExternalLink href="https://slovensko-digital.darujme.sk/podporte-nas-financne-darujme/">
+    {chunks}
+  </ExternalLink>
 )
 
-const Suhlas = () => (
-  <div>
-    <h2 className="govuk-heading-m">Súhlas so zaslaním údajov</h2>
-    <Checkbox
-      name="XIIoddiel_suhlasZaslUdaje"
-      label="Želám si, aby prijímateľ 2% videl moje údaje (meno, priezvisko a adresa trvalého pobytu)"
-    />
-  </div>
-)
+const TriPercenta = ({ calculatedTax }) => {
+  const t = useTranslations('NgoTwoPercent')
+  return (
+    <>
+      <Checkbox
+        name="splnam3per"
+        label={t('threePercentLabel', {
+          amount: formatCurrency(calculatedTax.suma_3_percenta.toNumber()),
+        })}
+      />
+      <Details title={t('threePercentTitle')}>
+        <p className="govuk-hint">
+          {t.rich('threePercentVolunteering', {
+            strong: (chunks) => <strong>{chunks}</strong>,
+          })}
+        </p>
+        <p className="govuk-hint">{t('threePercentAnyOrganisation')}</p>
+        <p className="govuk-hint">{t('threePercentAttachment')}</p>
+      </Details>
+    </>
+  )
+}
+
+const Suhlas = () => {
+  const t = useTranslations('NgoTwoPercent')
+  return (
+    <div>
+      <h2 className="govuk-heading-m">{t('consentHeading')}</h2>
+      <Checkbox name="XIIoddiel_suhlasZaslUdaje" label={t('consentLabel')} />
+    </div>
+  )
+}
 
 const DvePercenta: Page<TwoPercentUserInput> = ({
   setTaxFormUserInput,
@@ -85,20 +86,22 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('NgoTwoPercent')
+  const tc = useTranslations('Common')
   const submitButtonRef = useRef(null)
   const calculatedTax = calculate(taxFormUserInput)
 
   const uplatnenie2PercentHint = donateOnly3Percent(calculatedTax)
-    ? `Nanešťastie, nespĺňate podmienky pre darovanie 2%, avšak spĺňate podmienky pre darovanie 3% zaplatenej dane (${formatCurrency(
-        calculatedTax.suma_3_percenta.toNumber(),
-      )})`
-    : `Spĺňate podmienky a môžete poukázať ${formatCurrency(
-        calculatedTax.suma_2_percenta.toNumber(),
-      )}`
+    ? t('onlyThreePercentHint', {
+        amount: formatCurrency(calculatedTax.suma_3_percenta.toNumber()),
+      })
+    : t('eligibleHint', {
+        amount: formatCurrency(calculatedTax.suma_2_percenta.toNumber()),
+      })
 
   const previousPageLink = (
     <Link href={previousRoute} data-test="back" className="govuk-back-link">
-      Späť
+      {tc('back')}
     </Link>
   )
 
@@ -106,29 +109,18 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
     return (
       <>
         {previousPageLink}
-        <h1 className="govuk-heading-l">
-          Poukázanie 2% alebo 3% zaplatenej dane neziskovej organizácii
-        </h1>
+        <h1 className="govuk-heading-l">{t('heading')}</h1>
         <p data-test="ineligible-message">
-          Ľutujeme, nespĺňate podmienky na poukázanie čiastky dane, nakoľko by
-          táto čiastka neprekočila{' '}
-          {formatCurrency(MIN_2_PERCENT_CALCULATED_DONATION)}. Dôvodom je
-          nepostačujúca výška zaplatenej dane.
+          {t('ineligible', {
+            amount: formatCurrency(MIN_2_PERCENT_CALCULATED_DONATION),
+          })}
         </p>
         <div className="box govuk-!-margin-bottom-5">
-          <p>
-            Stále viete{' '}
-            <ExternalLink href="https://slovensko-digital.darujme.sk/podporte-nas-financne-darujme/">
-              podporiť prácu Slovensko.Digital
-            </ExternalLink>{' '}
-            , ktoré za pomoci dobrovoľníkov pripravilo túto aplikáciu
-            prostredníctvom ľubovolného finančného daru. Každému darcovi a
-            darkyni ďakujeme !
-          </p>
+          <p>{t.rich('supportUs', { link: supportLink })}</p>
         </div>
         <Link href={nextRoute} legacyBehavior>
           <button className="govuk-button govuk-!-margin-top-4" type="button">
-            Pokračovať
+            {tc('continue')}
           </button>
         </Link>
       </>
@@ -140,7 +132,7 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
       {previousPageLink}
       <FormWrapper<TwoPercentUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           setTaxFormUserInput(values)
           router.push(nextRoute)
@@ -151,7 +143,7 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
             <ErrorSummary<TwoPercentUserInput> errors={props.errors} />
             <Form className="form" noValidate>
               <Fieldset
-                title={`Chcete poukázať 2% alebo 3% zaplatenej dane niektorej neziskovej organizácii?`}
+                title={t('question')}
                 error={props.errors.dve_percenta_podporujem}
                 hint={uplatnenie2PercentHint}
               >
@@ -187,7 +179,7 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
                 >
                   <Radio
                     name="dve_percenta_podporujem-ano-sk-digital-input"
-                    label="Áno, Slovensko.Digital"
+                    label={t('answerSlovenskoDigital')}
                     value="ano-sk-digital"
                   />
                   <RadioConditional forValue="ano-sk-digital">
@@ -197,20 +189,18 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
 
                   <Radio
                     name="dve_percenta_podporujem-ano-inu-input"
-                    label="Áno, inú organizáciu"
+                    label={t('answerOther')}
                     value="ano-inu"
                   />
                   <RadioConditional forValue="ano-inu">
                     <TriPercenta calculatedTax={calculatedTax} />
                     <Suhlas />
-                    <h2 className="govuk-heading-m">Údaje o prijímateľovi</h2>
-                    <p>
-                      Údaje môžete vyhladať a automaticky vyplniť podľa názvu.
-                    </p>
+                    <h2 className="govuk-heading-m">{t('recipientHeading')}</h2>
+                    <p>{t('recipientHint')}</p>
 
                     <AutoCompleteInput
                       name="r142_obchMeno"
-                      label="Názov neziskovej organizácie alebo občianskeho združenia"
+                      label={t('recipientName')}
                       onSelect={makeHandleOrganisationAutoform(props)}
                       fetchData={async (name) => {
                         const data = await getNgoByName(name)
@@ -227,7 +217,7 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
                         className={styles.inlineField}
                         name="r142_ico"
                         type="text"
-                        label="IČO"
+                        label={t('recipientIco')}
                         maxLength={12}
                         onChange={async (event) => {
                           props.setFieldValue(
@@ -239,22 +229,13 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
                     </div>
 
                     <div className="box govuk-!-margin-top-5">
-                      <p>
-                        Ak ste sa aj rozhodli svojimi 2% podporiť inú
-                        organizáciu, stále viete{' '}
-                        <ExternalLink href="https://slovensko-digital.darujme.sk/podporte-nas-financne-darujme/">
-                          podporiť prácu Slovensko.Digital
-                        </ExternalLink>{' '}
-                        , ktoré za pomoci dobrovoľníkov pripravilo túto
-                        aplikáciu prostredníctvom ľubovolného finančného daru.
-                        Každému darcovi a darkyni ďakujeme !
-                      </p>
+                      <p>{t.rich('supportUsOther', { link: supportLink })}</p>
                     </div>
                   </RadioConditional>
 
                   <Radio
                     name="dve_percenta_podporujem-nie-input"
-                    label="Nie"
+                    label={tc('no')}
                     value="nie"
                   />
                 </RadioGroup>
@@ -265,7 +246,7 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
                 type="submit"
                 ref={submitButtonRef}
               >
-                Pokračovať
+                {tc('continue')}
               </button>
             </Form>
           </>
@@ -276,19 +257,22 @@ const DvePercenta: Page<TwoPercentUserInput> = ({
 }
 
 type Errors = Partial<FormErrors<TwoPercentUserInput>>
-export const validate = (values: TwoPercentUserInput): Errors => {
+export const validate = (
+  values: TwoPercentUserInput,
+  t: Translate = slovakTranslator('NgoTwoPercent'),
+): Errors => {
   const errors: Errors = {}
 
   if (typeof values.dve_percenta_podporujem === 'undefined') {
-    errors.dve_percenta_podporujem = 'Vyznačte odpoveď'
+    errors.dve_percenta_podporujem = t('errorSelectAnswer')
   }
   if (['ano-sk-digital', 'ano-inu'].includes(values.dve_percenta_podporujem)) {
     if (!values.r142_ico) {
-      errors.r142_ico = 'Zadajte IČO'
+      errors.r142_ico = t('errorIco')
     }
 
     if (!values.r142_obchMeno) {
-      errors.r142_obchMeno = 'Zadajte obchodne meno'
+      errors.r142_obchMeno = t('errorName')
     }
   }
   return errors

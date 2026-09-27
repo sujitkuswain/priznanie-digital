@@ -393,5 +393,30 @@
     "errorBirthNumber": "Enter the parent's birth number",
     "errorBirthNumberInvalid": "The birth number is not valid",
     "errorSameBirthNumber": "Both parents cannot have the same birth number"
+  },
+  "NgoTwoPercent": {
+    "threePercentLabel": "I meet the conditions to assign 3% of my tax ({amount})",
+    "threePercentTitle": "Who can assign 3% of their tax?",
+    "threePercentVolunteering": "If you did more than 40 hours of volunteer work last year, the organisation you volunteered for can issue you a <strong>confirmation of at least 40 hours of volunteer activities</strong> (Potvrdenie o odpracovaní minimálne 40 hodín dobrovoľníckych aktivít).",
+    "threePercentAnyOrganisation": "You can give your 3% to any eligible organisation. It does not have to be the organisation where you did the 40 hours.",
+    "threePercentAttachment": "You must attach the confirmation to your tax return.",
+    "consentHeading": "Consent to share your details",
+    "consentLabel": "I want the recipient of my 2% to see my details (first name, last name and permanent address)",
+    "onlyThreePercentHint": "Unfortunately, you do not meet the conditions to assign 2%, but you meet the conditions to assign 3% of your paid tax ({amount})",
+    "eligibleHint": "You meet the conditions and can assign {amount}",
+    "heading": "Assign 2% or 3% of your paid tax to a non-profit organisation",
+    "ineligible": "Sorry, you are not eligible to assign part of your tax, because the amount would not exceed {amount}. This is because the tax you paid is too low.",
+    "supportUs": "You can still <link>support the work of Slovensko.Digital</link>, which prepared this app with the help of volunteers, with a financial donation of any amount. Thank you to every donor!",
+    "supportUsOther": "Even if you decided to support another organisation with your 2%, you can still <link>support the work of Slovensko.Digital</link>, which prepared this app with the help of volunteers, with a financial donation of any amount. Thank you to every donor!",
+    "question": "Do you want to assign 2% or 3% of your paid tax to a non-profit organisation?",
+    "answerSlovenskoDigital": "Yes, Slovensko.Digital",
+    "answerOther": "Yes, another organisation",
+    "recipientHeading": "Recipient details",
+    "recipientHint": "You can search for the organisation by name and fill in its details automatically.",
+    "recipientName": "Name of the non-profit organisation or civic association",
+    "recipientIco": "Company ID (IČO)",
+    "errorSelectAnswer": "Select an answer",
+    "errorIco": "Enter the company ID (IČO)",
+    "errorName": "Enter the organisation name"
   }
 }
