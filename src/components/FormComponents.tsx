@@ -55,9 +55,11 @@ const RevalidateOnLocaleChange = <FormikInput extends FormikValues>({
     if (previousLocale.current === locale) return
     previousLocale.current = locale
     if (validate && Object.keys(errors).length > 0) {
-      Promise.resolve(validate(values)).then((newErrors) =>
-        setErrors(newErrors || {}),
-      )
+      // all page validators are synchronous
+      const newErrors = validate(values)
+      if (!(newErrors instanceof Promise)) {
+        setErrors(newErrors || {})
+      }
     }
   }, [locale])
 
