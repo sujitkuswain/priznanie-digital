@@ -1,4 +1,9 @@
 module.exports = {
+  i18n: {
+    locales: ['sk', 'en'],
+    defaultLocale: 'sk',
+    localeDetection: false,
+  },
   // to load runtime env vars we need to pass them via public runtime config (and disable static optimization)
   // this allows us to deploy one bundle into multiple envs
   publicRuntimeConfig: {

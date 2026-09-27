@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Feedback } from './Feedback'
 import { TaxFormUserInput } from '../types/TaxFormUserInput'
 import { PostponeUserInput } from '../types/PostponeUserInput'
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const Footer = ({ taxFormUserInput }: Props) => {
+  const t = useTranslations('Footer')
   return (
     <>
       <div className="sdn-feedbackbar">
@@ -26,7 +28,7 @@ const Footer = ({ taxFormUserInput }: Props) => {
                 <ul>
                   <li>
                     <ExternalLink href="https://navody.digital/disclaimer">
-                      Podmienky používania
+                      {t('termsOfUse')}
                     </ExternalLink>
                   </li>
                   <li>
@@ -34,7 +36,7 @@ const Footer = ({ taxFormUserInput }: Props) => {
                   </li>
                   <li>
                     <ExternalLink href="https://navody.digital/contact-info">
-                      Kontakt
+                      {t('contact')}
                     </ExternalLink>
                   </li>
                 </ul>
@@ -74,7 +76,7 @@ const Footer = ({ taxFormUserInput }: Props) => {
               </div>
             </div>
             <p className="sdn-footer__disclaimer govuk-!-font-size-14 govuk-!-margin-top-7">
-              Informácie zverejnené na stránke majú informatívny charakter.
+              {t('disclaimer')}
             </p>
           </div>
         </div>

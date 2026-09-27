@@ -1,0 +1,67 @@
+{
+  "App": {
+    "title": "Electronic tax return",
+    "headline": "Tax return for self-employed persons with flat-rate expenses (DPFO type B)",
+    "headlinePostpone": "Tax return deadline extension"
+  },
+  "Header": {
+    "switchLanguage": "SK",
+    "switchLanguageLabel": "Prepnúť do slovenčiny"
+  },
+  "Home": {
+    "sslConnection": "Secure SSL connection",
+    "preparedWith": "Prepared in cooperation with tax advisors from <link>AVENIAS Tax & Legal</link>",
+    "taxFormHeading": "Fill in your tax return",
+    "taxFormYear": "(version for tax year {year})",
+    "workingOnVersion": "We are working on the current version.",
+    "introLive": "Fill in your tax return quickly and easily.",
+    "introNotLive": "You will be able to prepare your tax return quickly and easily in {year} as well.",
+    "introDownload": "After entering some basic details, you can download your prepared tax return. We will then guide you through submitting it on the Financial Administration (Finančná správa) website.",
+    "introPurpose": "The app is intended for filing a regular or corrective tax return by self-employed persons (SZČO) working physically in Slovakia and claiming flat-rate expenses.",
+    "introVolunteers": "The project was created by a group of volunteers and tax advisors who update the guide and the app every year.",
+    "unsupportedHeading": "We do not support these cases yet:",
+    "unsupportedOtherIncome": "Income other than from self-employment, employment and property rental",
+    "unsupportedForeignIncome": "Foreign income (except self-employment income from providing services)",
+    "unsupportedLosses": "Tax losses",
+    "unsupportedPensioners": "Self-employed old-age pensioners",
+    "unsupportedLiabilities": "Liabilities and receivables (table 1b)",
+    "unsupportedWithholding": "Income settled by withholding tax (e.g. dividends, author royalties)",
+    "consentTaxForm": "By using this service, you agree to the processing of your personal data to the extent necessary to generate the tax return. We do not store your data; it is used solely to prepare the tax return.",
+    "startTaxForm": "I agree and want to prepare my tax return",
+    "notifyMe": "Notify me when the app is ready",
+    "postponeHeading": "Extend the deadline for tax year {year}",
+    "postponeUntilSlovakOnly": "until 30.6.{year} if you only had income from Slovakia, or",
+    "postponeUntilForeign": "until 30.9.{year} if you also had foreign income",
+    "consentPostpone": "By using this service, you agree to the processing of your personal data to the extent necessary to generate the deadline extension. We do not store your data; it is used solely to prepare the deadline extension.",
+    "deadlineWas": "The regular deadline for filing the tax return and paying the tax was 31.3.{year}",
+    "couldExtend": "You could have extended the deadline:",
+    "deadlineIs": "The regular deadline for filing the tax return and paying the tax is 31.3.{year}",
+    "canExtend": "You can extend the deadline:",
+    "postponeExpired": "The deadline for requesting an extension has passed",
+    "startPostpone": "I agree and want to extend the deadline"
+  },
+  "Footer": {
+    "termsOfUse": "Terms of use",
+    "privacyPolicy": "Privacy policy",
+    "contact": "Contact",
+    "disclaimer": "Information published on this website is for informational purposes only."
+  },
+  "Feedback": {
+    "foundBug": "Found a bug on this page?",
+    "writeUs": "Let us know",
+    "formHeading": "Report a bug",
+    "formIntro": "Use this form to report a bug in the guide or on the website. Please do not include personal data; bug reports are sent to us anonymously. We carefully review every report.",
+    "close": "close",
+    "thanks": "Thank you for your feedback.",
+    "whatWereYouDoing": "What were you doing?",
+    "whatWentWrong": "What went wrong?",
+    "email": "Your email",
+    "emailHint": "If you would like a reply or to hear when the bug is fixed, please include your email. It will only be used to reply to you.",
+    "send": "Send",
+    "sending": "Sending...",
+    "errorWhatWereYouDoing": "Please describe what you were doing when the bug occurred",
+    "errorWhatWentWrong": "Please describe what went wrong",
+    "errorEmail": "Enter a valid email or leave the field empty",
+    "errorSaving": "Sending failed, please try again"
+  }
+}

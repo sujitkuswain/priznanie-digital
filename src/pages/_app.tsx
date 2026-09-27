@@ -29,6 +29,11 @@ import { Plausible } from '../components/Plausible'
 import Head from 'next/head'
 import { checkCookie } from '../lib/cookie'
 import getConfig from 'next/config'
+import { NextIntlClientProvider } from 'next-intl'
+import sk from '../messages/sk.json'
+import en from '../messages/en.json'
+
+const messagesByLocale = { sk, en }
 
 setLocale({
   mixed: {
@@ -106,36 +111,45 @@ const MyApp = ({
     validateRoute(router, taxForm, taxFormUserInput, postponeUserInput, isDebug)
   }, [router, nextRoute, taxForm, taxFormUserInput, postponeUserInput])
 
+  const locale = router.locale === 'en' ? 'en' : 'sk'
+  const messages = messagesByLocale[locale]
+
   const headline = /^\/odklad\//.test(router.pathname)
-    ? 'Odklad daňového priznania'
-    : 'Daňové priznanie pre živnostníkov s paušálnymi výdavkami (DPFO typ B)'
+    ? messages.App.headlinePostpone
+    : messages.App.headline
   return (
-    <Layout
-      headline={headline}
-      taxFormUserInput={taxFormUserInput}
-      postponeUserInput={postponeUserInput}
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+      timeZone="Europe/Bratislava"
     >
-      <Head>
-        <title>Elektronické daňové priznanie</title>
-      </Head>
-      <Plausible />
-      <Component
-        isDebug={isDebug}
-        isLive={isLive}
-        isPostponeLive={isPostponeLive}
-        taxForm={taxForm}
+      <Layout
+        headline={headline}
         taxFormUserInput={taxFormUserInput}
-        setTaxFormUserInput={updateTaxFormUserInput}
         postponeUserInput={postponeUserInput}
-        setPostponeUserInput={setPostponeUserInput}
-        router={router}
-        previousRoute={previousRoute()}
-        nextRoute={nextRoute()}
-        previousPostponeRoute={previousPostponeRoute}
-        nextPostponeRoute={nextPostponeRoute}
-        {...pageProps}
-      />
-    </Layout>
+      >
+        <Head>
+          <title>{messages.App.title}</title>
+        </Head>
+        <Plausible />
+        <Component
+          isDebug={isDebug}
+          isLive={isLive}
+          isPostponeLive={isPostponeLive}
+          taxForm={taxForm}
+          taxFormUserInput={taxFormUserInput}
+          setTaxFormUserInput={updateTaxFormUserInput}
+          postponeUserInput={postponeUserInput}
+          setPostponeUserInput={setPostponeUserInput}
+          router={router}
+          previousRoute={previousRoute()}
+          nextRoute={nextRoute()}
+          previousPostponeRoute={previousPostponeRoute}
+          nextPostponeRoute={nextPostponeRoute}
+          {...pageProps}
+        />
+      </Layout>
+    </NextIntlClientProvider>
   )
 }
 

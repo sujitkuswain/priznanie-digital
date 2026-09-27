@@ -29,6 +29,10 @@ const customJestConfig = {
     'xsd',
     'xml',
   ],
+  // next-intl ships ESM only; unit tests use a lightweight stub that returns message keys
+  moduleNameMapper: {
+    '^next-intl$': '<rootDir>/__tests__/utils/nextIntlMock.tsx',
+  },
   transform: {
     '\\.xml$': 'jest-raw-loader',
     '\\.xsd$': 'jest-raw-loader',

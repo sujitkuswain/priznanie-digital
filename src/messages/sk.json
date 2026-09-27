@@ -1,0 +1,67 @@
+{
+  "App": {
+    "title": "Elektronické daňové priznanie",
+    "headline": "Daňové priznanie pre živnostníkov s paušálnymi výdavkami (DPFO typ B)",
+    "headlinePostpone": "Odklad daňového priznania"
+  },
+  "Header": {
+    "switchLanguage": "EN",
+    "switchLanguageLabel": "Switch to English"
+  },
+  "Home": {
+    "sslConnection": "Bezpečné SSL pripojenie",
+    "preparedWith": "Pripravené v spolupráci s daňovými poradcami z <link>AVENIAS Tax & Legal</link>",
+    "taxFormHeading": "Vyplnenie daňového priznania",
+    "taxFormYear": "(verzia za rok {year})",
+    "workingOnVersion": "Na aktuálnej verzii pracujeme.",
+    "introLive": "Vyplňte si daňové priznanie rýchlo a jednoducho.",
+    "introNotLive": "Daňové priznanie si tak budete môcť aj v roku {year} pripraviť rýchlo a jednoducho.",
+    "introDownload": "Po zadaní základných údajov bude možné stiahnuť si pripravené daňové priznanie a následne vás prevedieme aj procesom jeho podania na stránkach Finančnej správy.",
+    "introPurpose": "Aplikácia je určená na podanie riadneho a opravného daňového priznania pre SZČO vykonávajúce činnosť fyzicky na území SR, uplatňujúce paušálne výdavky.",
+    "introVolunteers": "Projekt vznikol spoluprácou skupiny dobrovoľníkov a daňových poradcov, ktorí každý rok pracujú na aktualizácii návodu aj aplikácie.",
+    "unsupportedHeading": "Tieto prípady zatiaľ nepodporujeme:",
+    "unsupportedOtherIncome": "Iné príjmy ako zo živnosti, zamestnania a z prenájmu nehnuteľností",
+    "unsupportedForeignIncome": "Príjem zo zahraničia (s výnimkou príjmov zo živnosti - poskytovanie služieb)",
+    "unsupportedLosses": "Daňové straty",
+    "unsupportedPensioners": "SZČO starobní dôchodcovia",
+    "unsupportedLiabilities": "Záväzky a pohľadávky (tabuľka 1b)",
+    "unsupportedWithholding": "Príjmy vysporiadané zrážkovou daňou (napr. dividendy, príjmy autorov)",
+    "consentTaxForm": "Používaním tejto služby súhlasíte so spracovaním osobných údajov v rozsahu nevyhnutnom na vygenerovanie daňového priznania. Vaše údaje neukladáme, sú použité výlučne na spracovanie daňového priznania.",
+    "startTaxForm": "Súhlasím a chcem pripraviť daňové priznanie",
+    "notifyMe": "Informujte ma keď bude aplikácia pripravená",
+    "postponeHeading": "Odklad daňového priznania za rok {year}",
+    "postponeUntilSlovakOnly": "do 30.6.{year} ak ste mali príjmy len zo Slovenska, alebo",
+    "postponeUntilForeign": "do 30.9.{year} ak ste mali príjmy aj zo zahraničia",
+    "consentPostpone": "Používaním tejto služby súhlasíte so spracovaním osobných údajov v rozsahu nevyhnutnom na vygenerovanie odkladu daňového priznania. Vaše údaje neukladáme, sú použité výlučne na spracovanie odkladu daňového priznania.",
+    "deadlineWas": "Riadny termín pre podanie daňového priznania a zaplatenie dane bol do 31.3.{year}",
+    "couldExtend": "Termín ste si mohli predĺžiť:",
+    "deadlineIs": "Riadny termín pre podanie daňového priznania a zaplatenie dane je 31.3.{year}",
+    "canExtend": "Termín si viete predĺžiť:",
+    "postponeExpired": "Termín na podanie odkladu DP vypršal",
+    "startPostpone": "Súhlasím a chcem odložiť daňové priznanie"
+  },
+  "Footer": {
+    "termsOfUse": "Podmienky používania",
+    "privacyPolicy": "Ochrana osobných údajov",
+    "contact": "Kontakt",
+    "disclaimer": "Informácie zverejnené na stránke majú informatívny charakter."
+  },
+  "Feedback": {
+    "foundBug": "Našli ste na stránke chybu?",
+    "writeUs": "Napíšte nám",
+    "formHeading": "Nahlásenie chyby",
+    "formIntro": "Pomocou tohto formuláru môžete nahlásiť chybu v návode, alebo na stránke. Neuvádzajte prosím svoje osobné údaje, chyby sú nám nahlasované anonymne. Všetky podnety starostlivo posudzujeme",
+    "close": "zatvoriť",
+    "thanks": "Ďakujeme za feedback.",
+    "whatWereYouDoing": "Čo ste robili?",
+    "whatWentWrong": "Čo sa nepodarilo?",
+    "email": "Váš email",
+    "emailHint": "Ak si želáte dostať odpoveď, informáciu o náprave, či zapracovaní nahlásenej chyby, prosím uveďte do textu napr. svoj email. Bude použitý iba na odpoveď.",
+    "send": "Odoslať",
+    "sending": "Odosielam...",
+    "errorWhatWereYouDoing": "Napíšte prosím čo ste robili keď nastala chyba",
+    "errorWhatWentWrong": "Napíšte prosím aká chyba nastala",
+    "errorEmail": "Zadajte správny email, alebo nechajte pole prázdne",
+    "errorSaving": "Chyba pri odosielaní, skúste znovu"
+  }
+}

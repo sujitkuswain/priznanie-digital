@@ -5,6 +5,7 @@ import { Warning } from '../components/Warning'
 import { TAX_YEAR } from '../lib/calculation'
 import { ExternalLink } from '../components/ExternalLink'
 import getConfig from 'next/config'
+import { useTranslations } from 'next-intl'
 
 const IconCheck = () => (
   <svg
@@ -36,40 +37,50 @@ const Home = ({
   isDebug,
   isLive,
   isPostponeLive,
-}) => (
-  <>
-    <div className="govuk-grid-column-two-thirds">
-      <TaxFormSection nextRoute={nextRoute} isDebug={isDebug} isLive={isLive} />
-    </div>
-
-    <div className="govuk-grid-column-one-third">
-      <div className={styles.postponeBox}>
-        <PostponeSection
-          nextPostponeRoute={nextPostponeRoute}
-          now={new Date()}
-          isPostponeLive={isPostponeLive}
+}) => {
+  const t = useTranslations('Home')
+  return (
+    <>
+      <div className="govuk-grid-column-two-thirds">
+        <TaxFormSection
+          nextRoute={nextRoute}
           isDebug={isDebug}
+          isLive={isLive}
         />
       </div>
 
-      <ul className={styles.safeList}>
-        <li>
-          <IconLock />
-          <p>Bezpečné SSL pripojenie</p>
-        </li>
-        <li>
-          <IconCheck />
-          <p>
-            Pripravené v spolupráci s daňovými poradcami z{' '}
-            <ExternalLink href="https://www.linkedin.com/company/avenias/">
-              AVENIAS Tax & Legal
-            </ExternalLink>
-          </p>
-        </li>
-      </ul>
-    </div>
-  </>
-)
+      <div className="govuk-grid-column-one-third">
+        <div className={styles.postponeBox}>
+          <PostponeSection
+            nextPostponeRoute={nextPostponeRoute}
+            now={new Date()}
+            isPostponeLive={isPostponeLive}
+            isDebug={isDebug}
+          />
+        </div>
+
+        <ul className={styles.safeList}>
+          <li>
+            <IconLock />
+            <p>{t('sslConnection')}</p>
+          </li>
+          <li>
+            <IconCheck />
+            <p>
+              {t.rich('preparedWith', {
+                link: (chunks) => (
+                  <ExternalLink href="https://www.linkedin.com/company/avenias/">
+                    {chunks}
+                  </ExternalLink>
+                ),
+              })}
+            </p>
+          </li>
+        </ul>
+      </div>
+    </>
+  )
+}
 
 export default Home
 
@@ -78,74 +89,47 @@ const {
 } = getConfig()
 
 const TaxFormSection = ({ nextRoute, isDebug, isLive }) => {
+  const t = useTranslations('Home')
   return (
     <>
       <h2 className="govuk-heading-l govuk-!-margin-top-3">
-        Vyplnenie daňového priznania
+        {t('taxFormHeading')}
         <br />
-        {`(verzia za rok ${TAX_YEAR})`}
+        {t('taxFormYear', { year: TAX_YEAR })}
       </h2>
 
       {!isLive && (
         <Warning className="govuk-!-font-weight-bold">
-          Na aktuálnej verzii pracujeme.
+          {t('workingOnVersion')}
         </Warning>
       )}
       <p className="govuk-body-l">
-        {isLive
-          ? `Vyplňte si daňové priznanie rýchlo a jednoducho.`
-          : `Daňové priznanie si tak budete môcť aj v roku ${
-              TAX_YEAR + 1
-            } pripraviť
-        rýchlo a jednoducho.`}
+        {isLive ? t('introLive') : t('introNotLive', { year: TAX_YEAR + 1 })}
       </p>
 
-      <p>
-        Po zadaní základných údajov bude možné stiahnuť si pripravené daňové
-        priznanie a následne vás prevedieme aj procesom jeho podania na
-        stránkach Finančnej správy.
-      </p>
+      <p>{t('introDownload')}</p>
 
-      <p>
-        Aplikácia je určená na podanie riadneho a opravného daňového priznania
-        pre SZČO vykonávajúce činnosť fyzicky na území SR, uplatňujúce paušálne
-        výdavky.
-      </p>
+      <p>{t('introPurpose')}</p>
 
-      <p>
-        Projekt vznikol spoluprácou skupiny dobrovoľníkov a daňových poradcov,
-        ktorí každý rok pracujú na aktualizácii návodu aj aplikácie.
-      </p>
+      <p>{t('introVolunteers')}</p>
 
       <Warning>
         <>
           <p>
-            <strong>Tieto prípady zatiaľ nepodporujeme:</strong>
+            <strong>{t('unsupportedHeading')}</strong>
           </p>
           <ul className="govuk-list govuk-list--bullet">
-            <li>
-              Iné príjmy ako zo živnosti, zamestnania a z prenájmu nehnuteľností
-            </li>
-            <li>
-              Príjem zo zahraničia (s výnimkou príjmov zo živnosti -
-              poskytovanie služieb)
-            </li>
-            <li>Daňové straty</li>
-            <li>SZČO starobní dôchodcovia</li>
-            <li>Záväzky a pohľadávky (tabuľka 1b)</li>
-            <li>
-              Príjmy vysporiadané zrážkovou daňou (napr. dividendy, príjmy
-              autorov)
-            </li>
+            <li>{t('unsupportedOtherIncome')}</li>
+            <li>{t('unsupportedForeignIncome')}</li>
+            <li>{t('unsupportedLosses')}</li>
+            <li>{t('unsupportedPensioners')}</li>
+            <li>{t('unsupportedLiabilities')}</li>
+            <li>{t('unsupportedWithholding')}</li>
           </ul>
         </>
       </Warning>
 
-      <p className="govuk-body-xs">
-        Používaním tejto služby súhlasíte so spracovaním osobných údajov v
-        rozsahu nevyhnutnom na vygenerovanie daňového priznania. Vaše údaje
-        neukladáme, sú použité výlučne na spracovanie daňového priznania.
-      </p>
+      <p className="govuk-body-xs">{t('consentTaxForm')}</p>
 
       {(isLive || isDebug) && (
         <Link href={nextRoute} legacyBehavior>
@@ -153,7 +137,7 @@ const TaxFormSection = ({ nextRoute, isDebug, isLive }) => {
             type="button"
             className="govuk-button govuk-button--large govuk-button--start govuk-!-margin-bottom-3"
           >
-            Súhlasím a chcem pripraviť daňové priznanie
+            {t('startTaxForm')}
             <svg
               className="govuk-button__start-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -175,7 +159,7 @@ const TaxFormSection = ({ nextRoute, isDebug, isLive }) => {
             type="button"
             className="govuk-button govuk-button--large govuk-button--start"
           >
-            Informujte ma keď bude aplikácia pripravená
+            {t('notifyMe')}
           </button>
         </Link>
       )}
@@ -189,29 +173,23 @@ const PostponeSection = ({
   isPostponeLive,
   isDebug,
 }) => {
+  const t = useTranslations('Home')
   const isPostponeTime = now.getMonth() < 3 || now.getFullYear() == TAX_YEAR
 
   return (
     <>
       <h2 className="govuk-heading-m govuk-!-margin-top-3">
-        {`Odklad daňového priznania za rok ${TAX_YEAR}`}
+        {t('postponeHeading', { year: TAX_YEAR })}
       </h2>
       <PostponeText now={now} />
       <ul className="govuk-list govuk-list--bullet">
-        <li>{`do 30.6.${
-          TAX_YEAR + 1
-        } ak ste mali príjmy len zo Slovenska, alebo`}</li>
-        <li>{`do 30.9.${TAX_YEAR + 1} ak ste mali príjmy aj zo zahraničia`}</li>
+        <li>{t('postponeUntilSlovakOnly', { year: TAX_YEAR + 1 })}</li>
+        <li>{t('postponeUntilForeign', { year: TAX_YEAR + 1 })}</li>
       </ul>
 
       {((isPostponeTime && isPostponeLive) || isDebug) && (
         <>
-          <p className="govuk-body-xs">
-            Používaním tejto služby súhlasíte so spracovaním osobných údajov v
-            rozsahu nevyhnutnom na vygenerovanie odkladu daňového priznania.
-            Vaše údaje neukladáme, sú použité výlučne na spracovanie odkladu
-            daňového priznania.
-          </p>
+          <p className="govuk-body-xs">{t('consentPostpone')}</p>
           <PostponeButton
             isPostponeTime={isPostponeTime}
             nextPostponeRoute={nextPostponeRoute}
@@ -222,30 +200,28 @@ const PostponeSection = ({
   )
 }
 
-const PostponeText = ({ now }: { now: Date }) => (
-  <>
-    {now.getMonth() > 2 && now.getFullYear() == TAX_YEAR + 1 && (
-      <>
-        <p>
-          {`Riadny termín pre podanie daňového priznania a zaplatenie dane bol do
-      31.3.${TAX_YEAR + 1}`}
-        </p>
-        <p>Termín ste si mohli predĺžiť:</p>
-      </>
-    )}
-    {(now.getMonth() < 3 || now.getFullYear() == TAX_YEAR) && (
-      <>
-        <p>
-          {`Riadny termín pre podanie daňového priznania a zaplatenie dane je
-  31.3.${TAX_YEAR + 1}`}
-        </p>
-        <p>Termín si viete predĺžiť:</p>
-      </>
-    )}
-  </>
-)
+const PostponeText = ({ now }: { now: Date }) => {
+  const t = useTranslations('Home')
+  return (
+    <>
+      {now.getMonth() > 2 && now.getFullYear() == TAX_YEAR + 1 && (
+        <>
+          <p>{t('deadlineWas', { year: TAX_YEAR + 1 })}</p>
+          <p>{t('couldExtend')}</p>
+        </>
+      )}
+      {(now.getMonth() < 3 || now.getFullYear() == TAX_YEAR) && (
+        <>
+          <p>{t('deadlineIs', { year: TAX_YEAR + 1 })}</p>
+          <p>{t('canExtend')}</p>
+        </>
+      )}
+    </>
+  )
+}
 
 const PostponeButton = ({ isPostponeTime, nextPostponeRoute }) => {
+  const t = useTranslations('Home')
   if (!isPostponeTime) {
     return (
       <button
@@ -253,7 +229,7 @@ const PostponeButton = ({ isPostponeTime, nextPostponeRoute }) => {
         className="btn-secondary govuk-button govuk-button--large govuk-button--disabled"
         disabled
       >
-        Termín na podanie odkladu DP vypršal
+        {t('postponeExpired')}
       </button>
     )
   }
@@ -265,7 +241,7 @@ const PostponeButton = ({ isPostponeTime, nextPostponeRoute }) => {
           type="button"
           className="btn-secondary govuk-button govuk-button--large"
         >
-          Súhlasím a chcem odložiť daňové priznanie
+          {t('startPostpone')}
         </button>
       </Link>
     )

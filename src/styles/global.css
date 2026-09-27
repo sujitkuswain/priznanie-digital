@@ -69,3 +69,38 @@ button:disabled {
 .sdn-footer__disclaimer {
   color: #d0d0d0;
 }
+
+.language-switch {
+  float: right;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.language-switch:link,
+.language-switch:visited {
+  color: #ffffff;
+}
+
+.language-switch:hover {
+  background: #ffffff;
+  color: #2e3ac7;
+}
+
+.language-switch:focus-visible {
+  outline: 3px solid transparent;
+  background: #ffdd00;
+  border-color: #ffdd00;
+  color: #0b0c0c;
+}
+
+.language-switch svg {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}

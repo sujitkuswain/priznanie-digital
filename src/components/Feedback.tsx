@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Form } from 'formik'
 import classNames from 'classnames'
 import { ChildInput, TaxFormUserInput } from '../types/TaxFormUserInput'
@@ -68,19 +69,19 @@ const sendFeedback = async ({
   return response.status === 200
 }
 
-const validateFeedbackForm = (values) => {
+const validateFeedbackForm = (values, t) => {
   const errors: Record<string, string> = {}
 
   if (!values.whatWereYouDoing) {
-    errors.whatWereYouDoing = 'Napíšte prosím čo ste robili keď nastala chyba'
+    errors.whatWereYouDoing = t('errorWhatWereYouDoing')
   }
 
   if (!values.whatWentWrong) {
-    errors.whatWentWrong = 'Napíšte prosím aká chyba nastala'
+    errors.whatWentWrong = t('errorWhatWentWrong')
   }
 
   if (values.email && !values.email.match(/^.+@.+\.[a-z]+$/i)) {
-    errors.email = 'Zadajte správny email, alebo nechajte pole prázdne'
+    errors.email = t('errorEmail')
   }
 
   return errors
@@ -95,6 +96,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
   taxFormUserInput,
   close,
 }) => {
+  const t = useTranslations('Feedback')
   const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] =
     useState(undefined)
 
@@ -105,12 +107,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     >
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds govuk-!-margin-bottom-4">
-          <h3 className="govuk-heading-m">Nahlásenie chyby</h3>
-          <p className="govuk-body">
-            Pomocou tohto formuláru môžete nahlásiť chybu v návode, alebo na
-            stránke. Neuvádzajte prosím svoje osobné údaje, chyby sú nám
-            nahlasované anonymne. Všetky podnety starostlivo posudzujeme
-          </p>
+          <h3 className="govuk-heading-m">{t('formHeading')}</h3>
+          <p className="govuk-body">{t('formIntro')}</p>
         </div>
         <div
           className="govuk-grid-column-one-third"
@@ -123,14 +121,14 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               close()
             }}
           >
-            zatvoriť
+            {t('close')}
           </a>
         </div>
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
           {isSubmittedSuccessfully === true ? (
-            <p className="govuk-body">Ďakujeme za feedback.</p>
+            <p className="govuk-body">{t('thanks')}</p>
           ) : (
             <FormWrapper<FeedbackFormInput>
               initialValues={{
@@ -138,7 +136,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 whatWentWrong: '',
                 email: '',
               }}
-              validate={validateFeedbackForm}
+              validate={(values) => validateFeedbackForm(values, t)}
               onSubmit={async (values, { setErrors }) => {
                 const success = await sendFeedback({
                   ...values,
@@ -148,7 +146,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
                 if (!success) {
                   setErrors({
-                    saving: 'Chyba pri odosielaní, skúste znovu',
+                    saving: t('errorSaving'),
                   })
                 }
               }}
@@ -158,20 +156,20 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                   <ErrorSummary errors={formik.errors} />
                   <Input
                     name="whatWereYouDoing"
-                    label="Čo ste robili?"
+                    label={t('whatWereYouDoing')}
                     type="text"
                     width="auto"
                   />
                   <Input
                     name="whatWentWrong"
-                    label="Čo sa nepodarilo?"
+                    label={t('whatWentWrong')}
                     type="textarea"
                   />
                   <Input
                     name="email"
-                    label="Váš email"
+                    label={t('email')}
                     type="email"
-                    hint="Ak si želáte dostať odpoveď, informáciu o náprave, či zapracovaní nahlásenej chyby, prosím uveďte do textu napr. svoj email. Bude použitý iba na odpoveď."
+                    hint={t('emailHint')}
                   />
                   <button
                     type="submit"
@@ -184,7 +182,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                     )}
                     disabled={formik.isSubmitting}
                   >
-                    {formik.isSubmitting ? 'Odosielam...' : 'Odoslať'}
+                    {formik.isSubmitting ? t('sending') : t('send')}
                   </button>
                 </Form>
               )}
@@ -201,6 +199,7 @@ interface FeedbackProps {
 }
 
 export const Feedback: React.FC<FeedbackProps> = ({ taxFormUserInput }) => {
+  const t = useTranslations('Feedback')
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
 
   if (isFeedbackOpen) {
@@ -216,7 +215,7 @@ export const Feedback: React.FC<FeedbackProps> = ({ taxFormUserInput }) => {
       <div className="sdn-feedbackbar__useful" />
 
       <div className="sdn-feedbackbar__foundbug">
-        <span>Našli ste na stránke chybu?&nbsp;</span>
+        <span>{t('foundBug')}&nbsp;</span>
         <span>
           <a
             href="#"
@@ -227,7 +226,7 @@ export const Feedback: React.FC<FeedbackProps> = ({ taxFormUserInput }) => {
               setIsFeedbackOpen(true)
             }}
           >
-            Napíšte nám
+            {t('writeUs')}
           </a>
         </span>
       </div>
