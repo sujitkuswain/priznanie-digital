@@ -16,16 +16,6 @@ const options = {
   keys: ['code', 'label', 'translit', 'labelEn'],
 }
 
-function useFuse<T>(data: T[]): Fuse<T> {
-  const fuseRef = useRef(new Fuse(data, options))
-
-  useEffect(() => {
-    fuseRef.current = new Fuse(data, options)
-  }, [data])
-
-  return fuseRef.current
-}
-
 interface Nace {
   code: string
   label: string
@@ -41,23 +31,33 @@ const formatNace = (nace: Fuse.FuseResult<Nace>): AutoCompleteItem => ({
     : undefined,
 })
 
+interface NaceIndex {
+  data: Nace[]
+  fuse: Fuse<Nace>
+}
+
+const loadNace = async (locale: string): Promise<NaceIndex> => {
+  const result: Nace[] = await getNace()
+  const englishLabels = locale === 'en' ? await getNaceEnglishLabels() : {}
+  const data = result.map((item) => ({
+    ...item,
+    labelEn: englishLabels[item.code],
+  }))
+  return { data, fuse: new Fuse(data, options) }
+}
+
 export const Nace: React.FC = () => {
   const locale = useLocale()
   const [naceData, setNaceData] = useState<Nace[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const fuse = useFuse(naceData)
+  // searches wait for this, so typing before the list has loaded still finds results
+  const naceIndex = useRef<Promise<NaceIndex>>(null)
 
   const fetchData = async () => {
     setIsLoading(true)
-    const result: Nace[] = await getNace()
-    if (locale === 'en') {
-      const englishLabels = await getNaceEnglishLabels()
-      setNaceData(
-        result.map((item) => ({ ...item, labelEn: englishLabels[item.code] })),
-      )
-    } else {
-      setNaceData(result)
-    }
+    naceIndex.current = loadNace(locale)
+    const { data } = await naceIndex.current
+    setNaceData(data)
     setIsLoading(false)
   }
 
@@ -74,10 +74,14 @@ export const Nace: React.FC = () => {
       : value
   }
 
-  const searchNace = (value) => {
+  const searchNace = async (value: string) => {
+    if (!naceIndex.current) {
+      return []
+    }
+    const { data, fuse } = await naceIndex.current
     const searchResult = fuse.search(value)
     return searchResult.length === 0
-      ? naceData.map((item) => ({ item, score: 1, refIndex: 0 }))
+      ? data.map((item) => ({ item, score: 1, refIndex: 0 }))
       : searchResult
   }
 
@@ -96,7 +100,7 @@ export const Nace: React.FC = () => {
         minLength={0}
         formatDisplayValue={formatDisplayValue}
         fetchData={async (value: string) => {
-          const data = searchNace(value) as Fuse.FuseResult<Nace>[]
+          const data = await searchNace(value)
           return data.map((nace) => formatNace(nace))
         }}
       />
