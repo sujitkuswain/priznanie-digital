@@ -555,6 +555,7 @@
     "intro": "Download the XML file with your tax return.",
     "downloadXml": "Download XML",
     "sessionExpired": "Your session has expired",
-    "startAgain": "Start again"
+    "startAgain": "Start again",
+    "slovakVersionNote": "The Slovak version of this app works differently at this step: it sends you to Návody.Digital, which emails you the file and a step-by-step submission guide in Slovak only. Switching to SK on this page takes you there."
   }
 }

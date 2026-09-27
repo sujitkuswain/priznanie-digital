@@ -109,6 +109,7 @@ const DownloadXml = ({ taxForm, canContinue }) => {
       >
         {t('downloadXml')}
       </button>
+      <div className="govuk-inset-text">{t('slovakVersionNote')}</div>
     </>
   )
 }

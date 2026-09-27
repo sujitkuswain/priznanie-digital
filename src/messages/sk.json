@@ -555,6 +555,7 @@
     "intro": "Stiahnite si súbor XML s daňovým priznaním.",
     "downloadXml": "Stiahnuť XML",
     "sessionExpired": "Vaša session vypršala",
-    "startAgain": "Začnite znovu"
+    "startAgain": "Začnite znovu",
+    "slovakVersionNote": "Slovenská verzia aplikácie v tomto kroku pokračuje na Návody.Digital, kde dostanete súbor aj návod na podanie e-mailom."
   }
 }
