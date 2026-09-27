@@ -418,5 +418,31 @@
     "errorSelectAnswer": "Select an answer",
     "errorIco": "Enter the company ID (IČO)",
     "errorName": "Enter the organisation name"
+  },
+  "PersonalDetails": {
+    "heading": "Taxpayer details",
+    "searchHint": "You can search for your details and fill them in automatically by your name.",
+    "searchLabel": "Enter your first name, last name or business name",
+    "titleBefore": "Title before name",
+    "titleAfter": "Title after name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "dic": "Tax ID (DIČ)",
+    "dicHint": "If you have not been assigned one, enter your birth number (rodné číslo)",
+    "addressHeading": "Permanent address",
+    "street": "Street",
+    "houseNumber": "House number",
+    "postalCode": "Postal code (PSČ)",
+    "municipality": "Municipality",
+    "country": "Country",
+    "errorDic": "Enter your assigned tax ID (DIČ)",
+    "errorDicLength": "The tax ID (DIČ) must have 9 to 10 characters",
+    "errorFirstName": "Enter your first name",
+    "errorLastName": "Enter your last name",
+    "errorHouseNumber": "Enter the house number",
+    "errorPostalCode": "Enter the postal code (PSČ)",
+    "errorPostalCodeFormat": "The postal code (PSČ) can only contain 5 digits",
+    "errorMunicipality": "Enter the municipality",
+    "errorCountry": "Enter the country"
   }
 }

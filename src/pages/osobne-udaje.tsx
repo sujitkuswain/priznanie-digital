@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, FormikProps } from 'formik'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { FormWrapper, Input } from '../components/FormComponents'
 import styles from './osobne-udaje.module.css'
 import {
@@ -14,6 +15,7 @@ import { formatPsc, getStreetNumber } from '../lib/utils'
 import { Nace } from '../components/Nace'
 import { Page } from '../components/Page'
 import { AutoFormSubject } from '../types/api'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const formatNace = (economicActivity) => {
   const { code, name } = economicActivity || {}
@@ -77,14 +79,16 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('PersonalDetails')
+  const tc = useTranslations('Common')
   return (
     <>
       <Link href={previousRoute} data-test="back" className="govuk-back-link">
-        Späť
+        {tc('back')}
       </Link>
       <FormWrapper<PersonalInformationUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           setTaxFormUserInput(values)
           router.push(nextRoute)
@@ -94,15 +98,12 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
           <>
             <ErrorSummary<PersonalInformationUserInput> errors={props.errors} />
             <Form className="form">
-              <h2 className="govuk-heading-l">Údaje o daňovníkovi</h2>
-              <p>
-                Údaje môžete vyhladať a automaticky vyplniť podľa mena a
-                priezviska.
-              </p>
+              <h2 className="govuk-heading-l">{t('heading')}</h2>
+              <p>{t('searchHint')}</p>
 
               <AutoCompleteInput
                 name="meno_priezvisko"
-                label="Zadajte meno, priezvisko alebo podnikateľský názov"
+                label={t('searchLabel')}
                 onSelect={makeHandlePersonAutoform(props)}
                 fetchData={async (name) => {
                   const data = await getAutoformByPersonName(name)
@@ -119,13 +120,13 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                   className={styles.inlineField}
                   name="r006_titul"
                   type="text"
-                  label="Titul pred menom"
+                  label={t('titleBefore')}
                 />
                 <Input
                   className={styles.inlineField}
                   name="r006_titul_za"
                   type="text"
-                  label="Titul za menom"
+                  label={t('titleAfter')}
                 />
               </div>
 
@@ -133,7 +134,7 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                 className={styles.wideField}
                 name="r005_meno"
                 type="text"
-                label="Meno"
+                label={t('firstName')}
                 width="auto"
               />
 
@@ -141,7 +142,7 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                 className={styles.wideField}
                 name="r004_priezvisko"
                 type="text"
-                label="Priezvisko"
+                label={t('lastName')}
                 width="auto"
               />
 
@@ -152,24 +153,24 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                   className={styles.inlineField}
                   name="r001_dic"
                   type="text"
-                  label="DIČ"
-                  hint="Ak nie je pridelené, uvádza sa rodné číslo"
+                  label={t('dic')}
+                  hint={t('dicHint')}
                 />
               </div>
 
-              <h2 className="govuk-heading-l">Adresa trvalého pobytu</h2>
+              <h2 className="govuk-heading-l">{t('addressHeading')}</h2>
               <div className={styles.inlineFieldContainer}>
                 <Input
                   className={styles.inlineField}
                   name="r007_ulica"
                   type="text"
-                  label="Ulica"
+                  label={t('street')}
                 />
                 <Input
                   className={styles.inlineField}
                   name="r008_cislo"
                   type="text"
-                  label="Súpisné/orientačné číslo"
+                  label={t('houseNumber')}
                 />
               </div>
               <div className={styles.inlineFieldContainer}>
@@ -177,7 +178,7 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                   className={styles.inlineField}
                   name="r009_psc"
                   type="text"
-                  label="PSČ"
+                  label={t('postalCode')}
                   maxLength={6}
                   onChange={async (event) => {
                     const pscValue = formatPsc(
@@ -192,14 +193,14 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
                   className={styles.inlineField}
                   name="r010_obec"
                   type="text"
-                  label="Obec"
+                  label={t('municipality')}
                 />
               </div>
 
-              <Input name="r011_stat" type="text" label="Štát" />
+              <Input name="r011_stat" type="text" label={t('country')} />
 
               <button className="govuk-button" type="submit">
-                Pokračovať
+                {tc('continue')}
               </button>
             </Form>
           </>
@@ -209,43 +210,46 @@ const OsobneUdaje: Page<PersonalInformationUserInput> = ({
   )
 }
 
-export const validate = (values: PersonalInformationUserInput) => {
+export const validate = (
+  values: PersonalInformationUserInput,
+  t: Translate = slovakTranslator('PersonalDetails'),
+) => {
   const errors: Partial<FormErrors<PersonalInformationUserInput>> = {}
 
   if (!values.r001_dic) {
-    errors.r001_dic = 'Zadajte pridelené DIČ'
+    errors.r001_dic = t('errorDic')
   } else if (values.r001_dic.length < 9 || values.r001_dic.length > 10) {
     /**
      * @see https://ec.europa.eu/taxation_customs/tin/pdf/sk/TIN_-_subject_sheet_-_2_structure_and_specificities_sk.pdf
      */
-    errors.r001_dic = 'DIČ musí mať minimálne 9 znakov a maximálne 10 znakov'
+    errors.r001_dic = t('errorDicLength')
   }
 
   if (!values.r005_meno) {
-    errors.r005_meno = 'Zadajte vaše meno'
+    errors.r005_meno = t('errorFirstName')
   }
 
   if (!values.r004_priezvisko) {
-    errors.r004_priezvisko = 'Zadajte vaše priezvisko'
+    errors.r004_priezvisko = t('errorLastName')
   }
 
   if (!values.r008_cislo) {
-    errors.r008_cislo = 'Zadajte číslo domu'
+    errors.r008_cislo = t('errorHouseNumber')
   }
 
   const pscNumberFormat = /^\d{3} \d{2}$/
   if (!values.r009_psc) {
-    errors.r009_psc = 'Zadajte PSČ'
+    errors.r009_psc = t('errorPostalCode')
   } else if (!pscNumberFormat.test(values.r009_psc)) {
-    errors.r009_psc = 'PSČ môže obsahovať iba 5 čísel'
+    errors.r009_psc = t('errorPostalCodeFormat')
   }
 
   if (!values.r010_obec) {
-    errors.r010_obec = 'Zadajte obec'
+    errors.r010_obec = t('errorMunicipality')
   }
 
   if (!values.r011_stat) {
-    errors.r011_stat = 'Zadajte štát'
+    errors.r011_stat = t('errorCountry')
   }
 
   return errors

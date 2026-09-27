@@ -15,3 +15,5 @@ export const NextIntlClientProvider = ({
 }: {
   children: React.ReactNode
 }) => <>{children}</>
+
+export const useLocale = () => 'sk'

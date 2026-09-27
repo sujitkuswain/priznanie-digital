@@ -80,7 +80,7 @@ export const getNgoByName = async (name: string) => {
 }
 
 export const getNace = async () => {
-  return fetch(`nace.json`)
+  return fetch(`/nace.json`)
     .then((response) => response.json())
     .then((values) => {
       return values.map((item) => ({
@@ -88,4 +88,11 @@ export const getNace = async () => {
         translit: translit(item.label),
       }))
     })
+}
+
+// English NACE labels keyed by code, used for display only
+export const getNaceEnglishLabels = async (): Promise<
+  Record<string, string>
+> => {
+  return fetch(`/nace-en.json`).then((response) => response.json())
 }

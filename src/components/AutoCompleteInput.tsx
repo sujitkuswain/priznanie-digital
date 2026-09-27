@@ -10,14 +10,19 @@ export interface AutoCompleteData extends Omit<AutoFormSubject, 'id'> {
   id: number | string
 }
 
+// optional displayLabel is shown in the list instead of the stored value
+export type AutoCompleteItem = Pick<AutoCompleteData, 'id' | 'value'> & {
+  displayLabel?: string
+}
+
 export interface AutoCompleteInputProps {
   name: keyof UserInput
   label: string
-  fetchData: (
-    value: string,
-  ) => Promise<Pick<AutoCompleteData, 'id' | 'value'>[]>
+  fetchData: (value: string) => Promise<AutoCompleteItem[]>
   onSelect?: (data: AutoCompleteData) => void
   minLength?: number
+  // shows the stored value differently in the input, e.g. translated
+  formatDisplayValue?: (value: string) => string
 }
 export const AutoCompleteInput = ({
   name,
@@ -25,6 +30,7 @@ export const AutoCompleteInput = ({
   onSelect,
   fetchData,
   minLength = 2,
+  formatDisplayValue,
 }: AutoCompleteInputProps) => {
   const [autocompleteData, setAutocompleteData] = useState([])
   const autocompleteList = useRef(null)
@@ -140,6 +146,9 @@ export const AutoCompleteInput = ({
       <div className={styles.autocompleteFieldWrapper}>
         <Input
           {...field}
+          value={
+            formatDisplayValue ? formatDisplayValue(field.value) : field.value
+          }
           name={name}
           type="text"
           label={label}
@@ -180,7 +189,7 @@ export const AutoCompleteInput = ({
                   setSelectedItemIndex(index)
                 }}
               >
-                {item.value}
+                {item.displayLabel ?? item.value}
               </li>
             ))}
           </ul>

@@ -418,5 +418,31 @@
     "errorSelectAnswer": "Vyznačte odpoveď",
     "errorIco": "Zadajte IČO",
     "errorName": "Zadajte obchodne meno"
+  },
+  "PersonalDetails": {
+    "heading": "Údaje o daňovníkovi",
+    "searchHint": "Údaje môžete vyhladať a automaticky vyplniť podľa mena a priezviska.",
+    "searchLabel": "Zadajte meno, priezvisko alebo podnikateľský názov",
+    "titleBefore": "Titul pred menom",
+    "titleAfter": "Titul za menom",
+    "firstName": "Meno",
+    "lastName": "Priezvisko",
+    "dic": "DIČ",
+    "dicHint": "Ak nie je pridelené, uvádza sa rodné číslo",
+    "addressHeading": "Adresa trvalého pobytu",
+    "street": "Ulica",
+    "houseNumber": "Súpisné/orientačné číslo",
+    "postalCode": "PSČ",
+    "municipality": "Obec",
+    "country": "Štát",
+    "errorDic": "Zadajte pridelené DIČ",
+    "errorDicLength": "DIČ musí mať minimálne 9 znakov a maximálne 10 znakov",
+    "errorFirstName": "Zadajte vaše meno",
+    "errorLastName": "Zadajte vaše priezvisko",
+    "errorHouseNumber": "Zadajte číslo domu",
+    "errorPostalCode": "Zadajte PSČ",
+    "errorPostalCodeFormat": "PSČ môže obsahovať iba 5 čísel",
+    "errorMunicipality": "Zadajte obec",
+    "errorCountry": "Zadajte štát"
   }
 }

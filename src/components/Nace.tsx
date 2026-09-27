@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useLocale } from 'next-intl'
 import classnames from 'classnames'
 import Fuse from 'fuse.js'
-import { getNace } from '../lib/api'
+import { getNace, getNaceEnglishLabels } from '../lib/api'
 import styles from './Nace.module.css'
-import { AutoCompleteData, AutoCompleteInput } from './AutoCompleteInput'
+import { AutoCompleteInput, AutoCompleteItem } from './AutoCompleteInput'
 
 const options = {
   shouldSort: true,
@@ -12,7 +13,7 @@ const options = {
   location: 30,
   distance: 100,
   minMatchCharLength: 2,
-  keys: ['code', 'label', 'translit'],
+  keys: ['code', 'label', 'translit', 'labelEn'],
 }
 
 function useFuse<T>(data: T[]): Fuse<T> {
@@ -28,16 +29,20 @@ function useFuse<T>(data: T[]): Fuse<T> {
 interface Nace {
   code: string
   label: string
+  labelEn?: string
 }
 
-const formatNace = (
-  nace: Fuse.FuseResult<Nace>,
-): Pick<AutoCompleteData, 'value' | 'id'> => ({
+// the stored value keeps the official Slovak label, it is written to the tax form XML
+const formatNace = (nace: Fuse.FuseResult<Nace>): AutoCompleteItem => ({
   id: nace?.item?.code,
   value: `${nace?.item?.code} - ${nace?.item?.label}`,
+  displayLabel: nace?.item?.labelEn
+    ? `${nace.item.code} - ${nace.item.labelEn}`
+    : undefined,
 })
 
 export const Nace: React.FC = () => {
+  const locale = useLocale()
   const [naceData, setNaceData] = useState<Nace[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const fuse = useFuse(naceData)
@@ -45,13 +50,29 @@ export const Nace: React.FC = () => {
   const fetchData = async () => {
     setIsLoading(true)
     const result: Nace[] = await getNace()
-    setNaceData(result)
+    if (locale === 'en') {
+      const englishLabels = await getNaceEnglishLabels()
+      setNaceData(
+        result.map((item) => ({ ...item, labelEn: englishLabels[item.code] })),
+      )
+    } else {
+      setNaceData(result)
+    }
     setIsLoading(false)
   }
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [locale])
+
+  // show the English label for a selected code; the stored value stays Slovak
+  const formatDisplayValue = (value: string) => {
+    const code = value?.split(' - ')[0]
+    const nace = naceData.find((item) => item.code === code)
+    return nace?.labelEn && value === `${nace.code} - ${nace.label}`
+      ? `${nace.code} - ${nace.labelEn}`
+      : value
+  }
 
   const searchNace = (value) => {
     const searchResult = fuse.search(value)
@@ -73,6 +94,7 @@ export const Nace: React.FC = () => {
         name="r003_nace"
         label="NACE"
         minLength={0}
+        formatDisplayValue={formatDisplayValue}
         fetchData={async (value: string) => {
           const data = searchNace(value) as Fuse.FuseResult<Nace>[]
           return data.map((nace) => formatNace(nace))
