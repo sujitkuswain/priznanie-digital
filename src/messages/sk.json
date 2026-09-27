@@ -511,5 +511,31 @@
     "postalCode": "PSČ",
     "municipality": "Obec",
     "country": "Štát"
+  },
+  "Results": {
+    "heading": "Výpočet dane za rok {year}",
+    "employmentAndSelfEmployment": "Príjmy zo zamestnania a živnosti",
+    "rentalIncome": "Príjmy z prenájmu nehnuteľností",
+    "taxToPayOrOverpayment": "Daň na úhradu / daňový preplatok",
+    "incomeTotal": "Príjmy spolu",
+    "flatRateExpenses": "Paušálne výdavky",
+    "insurancePaidTotal": "Zaplatené poistné spolu",
+    "allowanceSelf": "Nezdaniteľná časť na vás",
+    "allowancePartner": "Nezdaniteľná časť na manželku / manžela",
+    "pensionContributions": "Príspevky na doplnkové dôchodkové poistenie",
+    "taxBase": "Základ dane",
+    "provableExpensesTotal": "Preukázateľné výdavky spolu",
+    "taxTotal": "Daň spolu",
+    "taxAdvances": "Preddavky na daň",
+    "childBonus": "Nárok na daňový bonus na deti",
+    "mortgageBonus": "Daňový bonus na zaplatené úroky",
+    "bonusOverpaymentPayout": "Daňový bonus / preplatok na vyplatenie",
+    "taxToPay": "Daň na úhradu",
+    "advancesWarning": "Predpokladané {periodicity} preddavky na daň z príjmov v roku {year} budú {amount} (výpočet má informatívny charakter). Pre viac informácií navštívte web <link>Finančnej správy</link>.",
+    "periodicity": {
+      "kvartálne": "kvartálne",
+      "mesačne": "mesačne",
+      "neplatí": "neplatí"
+    }
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { formatCurrency } from '../lib/utils'
 import { TaxFormUserInput } from '../types/TaxFormUserInput'
 import { Page } from '../components/Page'
@@ -78,41 +79,43 @@ const Vysledky: Page<Partial<TaxFormUserInput>> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('Results')
+  const tc = useTranslations('Common')
   const summary = buildSummary(taxForm)
 
   const summaryRows = [
     {
-      title: 'Príjmy spolu',
+      title: t('incomeTotal'),
       value: summary.prijmy,
       key: 'prijmy',
     },
     {
-      title: 'Paušálne výdavky',
+      title: t('flatRateExpenses'),
       value: summary.pausalneVydavky,
       key: 'pausalneVydavky',
     },
     {
-      title: 'Zaplatené poistné spolu',
+      title: t('insurancePaidTotal'),
       value: summary.zaplatenePoistneSpolu,
       key: 'zaplatenePoistneSpolu',
     },
     {
-      title: 'Nezdaniteľná časť na vás',
+      title: t('allowanceSelf'),
       value: summary.nezdanitelnaCastNaSeba,
       key: 'nezdanitelnaCastNaSeba',
     },
     {
-      title: 'Nezdaniteľná časť na manželku / manžela',
+      title: t('allowancePartner'),
       value: summary.nezdanitelnaCastNaPartnera,
       key: 'nezdanitelnaCastNaPartnera',
     },
     {
-      title: 'Príspevky na doplnkové dôchodkové poistenie',
+      title: t('pensionContributions'),
       value: summary.prispevkyNaDochodkovePoistenie,
       key: 'prispevkyNaDochodkovePoistenie',
     },
     {
-      title: 'Základ dane',
+      title: t('taxBase'),
       value: summary.zakladDane,
       key: 'zakladDane',
       fontSize: 20,
@@ -122,17 +125,17 @@ const Vysledky: Page<Partial<TaxFormUserInput>> = ({
 
   const rentRows = [
     {
-      title: 'Príjmy spolu',
+      title: t('incomeTotal'),
       value: summary.prijemNehnutelnost,
       key: 'prijemNehnutelnost',
     },
     {
-      title: 'Preukázateľné výdavky spolu',
+      title: t('provableExpensesTotal'),
       value: summary.vydavkyNehnutelnost,
       key: 'vydavkyNehnutelnost',
     },
     {
-      title: 'Základ dane',
+      title: t('taxBase'),
       value: summary.zakladDanZPrenajmu,
       key: 'zakladDanZPrenajmu',
       fontSize: 20,
@@ -142,32 +145,32 @@ const Vysledky: Page<Partial<TaxFormUserInput>> = ({
 
   const totalRows = [
     {
-      title: 'Daň spolu',
+      title: t('taxTotal'),
       value: summary.danSpolu,
       key: 'danSpolu',
     },
     {
-      title: 'Preddavky na daň',
+      title: t('taxAdvances'),
       value: summary.preddavkyNaDan,
       key: 'preddavkyNaDan',
     },
     {
-      title: 'Nárok na daňový bonus na deti',
+      title: t('childBonus'),
       value: summary.danovyBonusNaDeti,
       key: 'danovyBonusNaDeti',
     },
     {
-      title: 'Daňový bonus na zaplatené úroky',
+      title: t('mortgageBonus'),
       value: summary.danovyBonusNaUroky,
       key: 'danovyBonusNaUroky',
     },
     {
-      title: 'Daňový bonus / preplatok na vyplatenie',
+      title: t('bonusOverpaymentPayout'),
       value: summary.danovyBonusPreplatokNaVyplatenie,
       key: 'danovyBonusPreplatokNaVyplatenie',
     },
     {
-      title: 'Daň na úhradu',
+      title: t('taxToPay'),
       value: summary.danNaUhradu,
       key: 'danNaUhradu',
       fontSize: 30,
@@ -178,29 +181,32 @@ const Vysledky: Page<Partial<TaxFormUserInput>> = ({
     <>
       <BackLink href={previousRoute} />
       <h1 className="govuk-heading-l govuk-!-margin-top-3">
-        {`Výpočet dane za rok ${TAX_YEAR}`}
+        {t('heading', { year: TAX_YEAR })}
       </h1>
       <Summary
-        title="Príjmy zo zamestnania a živnosti"
+        title={t('employmentAndSelfEmployment')}
         rows={summaryRows}
         compactView
       />
-      {taxForm.rent && (
-        <Summary title="Príjmy z prenájmu nehnuteľností" rows={rentRows} />
-      )}
-      <Summary title="Daň na úhradu / daňový preplatok" rows={totalRows} />
+      {taxForm.rent && <Summary title={t('rentalIncome')} rows={rentRows} />}
+      <Summary title={t('taxToPayOrOverpayment')} rows={totalRows} />
 
       {taxForm.preddavkyNaDan.suma.greaterThan(0) && (
         <Warning>
           <strong>
-            Predpokladané {taxForm.preddavkyNaDan.periodicita} preddavky na daň
-            z príjmov v roku {TAX_YEAR + 1} budú{' '}
-            {formatCurrency(taxForm.preddavkyNaDan.suma.toNumber())} (výpočet má
-            informatívny charakter). Pre viac informácií navštívte web{' '}
-            <ExternalLink href="https://www.financnasprava.sk/sk/elektronicke-sluzby/verejne-sluzby/danove-kalkulacky/vypocet-preddavkov-fo-2025">
-              Finančnej správy
-            </ExternalLink>
-            .
+            {t.rich('advancesWarning', {
+              // periodicita is a Slovak data value from calculation.ts
+              periodicity: t(
+                `periodicity.${taxForm.preddavkyNaDan.periodicita}`,
+              ),
+              year: TAX_YEAR + 1,
+              amount: formatCurrency(taxForm.preddavkyNaDan.suma.toNumber()),
+              link: (chunks) => (
+                <ExternalLink href="https://www.financnasprava.sk/sk/elektronicke-sluzby/verejne-sluzby/danove-kalkulacky/vypocet-preddavkov-fo-2025">
+                  {chunks}
+                </ExternalLink>
+              ),
+            })}
           </strong>
         </Warning>
       )}
@@ -211,7 +217,7 @@ const Vysledky: Page<Partial<TaxFormUserInput>> = ({
           className="govuk-button govuk-!-margin-top-3"
           type="submit"
         >
-          Pokračovať
+          {tc('continue')}
         </button>
       </Link>
     </>

@@ -511,5 +511,31 @@
     "postalCode": "Postal code (PSČ)",
     "municipality": "Municipality",
     "country": "Country"
+  },
+  "Results": {
+    "heading": "Tax calculation for {year}",
+    "employmentAndSelfEmployment": "Income from employment and self-employment",
+    "rentalIncome": "Income from renting out property",
+    "taxToPayOrOverpayment": "Tax to pay / tax overpayment",
+    "incomeTotal": "Total income",
+    "flatRateExpenses": "Flat-rate expenses",
+    "insurancePaidTotal": "Total insurance contributions paid",
+    "allowanceSelf": "Personal tax allowance",
+    "allowancePartner": "Spouse tax allowance",
+    "pensionContributions": "Supplementary pension savings contributions",
+    "taxBase": "Tax base",
+    "provableExpensesTotal": "Total provable expenses",
+    "taxTotal": "Total tax",
+    "taxAdvances": "Tax advances",
+    "childBonus": "Child tax bonus entitlement",
+    "mortgageBonus": "Tax bonus on paid mortgage interest",
+    "bonusOverpaymentPayout": "Tax bonus / overpayment to be paid out",
+    "taxToPay": "Tax to pay",
+    "advancesWarning": "Your estimated {periodicity} income tax advances in {year} will be {amount} (for information only). For more information, visit the <link>Financial Administration</link> website.",
+    "periodicity": {
+      "kvartálne": "quarterly",
+      "mesačne": "monthly",
+      "neplatí": "not applicable"
+    }
   }
 }
