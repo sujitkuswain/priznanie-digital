@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form } from 'formik'
+import { useTranslations } from 'next-intl'
 import { BooleanRadio, FormWrapper, Input } from '../components/FormComponents'
 import { DohodaUserInput, FormErrors } from '../types/PageUserInputs'
 import { numberInputRegexp } from '../lib/utils'
@@ -8,6 +9,7 @@ import { Page } from '../components/Page'
 import { dohodaUserInputInitialValues } from '../lib/initialValues'
 import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
+import { Translate, translateKey } from '../lib/i18n'
 
 const Dohoda: Page<DohodaUserInput> = ({
   setTaxFormUserInput,
@@ -16,12 +18,14 @@ const Dohoda: Page<DohodaUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  // root translator: this page reuses the Employment labels and errors
+  const t = useTranslations()
   return (
     <>
       <BackLink href={previousRoute} />
       <FormWrapper<DohodaUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           const userInput = values.dohoda
             ? values
@@ -37,50 +41,48 @@ const Dohoda: Page<DohodaUserInput> = ({
           <Form className="form" noValidate>
             <ErrorSummary<DohodaUserInput> errors={errors} />
             <BooleanRadio
-              title={`Mali ste v roku ${TAX_YEAR} príjmy z dohôd v SR?`}
+              title={t('Agreements.question', { year: TAX_YEAR })}
               name="dohoda"
             />
             {values.dohoda && (
               <>
                 <h3 className="govuk-heading-m">
-                  Nasledujúce hodnoty nájdete na tlačive &quot;Potvrdenie o
-                  zdaniteľných príjmoch fyzickej osoby&quot;. Ak ste mali viac
-                  dohôd, tak tieto sumy spočítajte a uveďte výsledné.
+                  {t('Agreements.documentIntro')}
                 </h3>
                 <Input
                   name="uhrnPrijmovZoVsetkychDohod"
                   type="number"
-                  label="Úhrn príjmov plynúcich na základe dohôd o prácach vykonávaných mimo pracovného pomeru"
-                  hint={`Napríklad na základe Dohody o vykonaní práce. Na tlačive "Potvrdenie o zdaniteľných príjmoch fyzickej osoby zo závislej činnosti" nájdete tento údaj v riadku 01a.`}
+                  label={t('Agreements.incomeLabel')}
+                  hint={t('Agreements.incomeHint')}
                 />
                 <Input
                   name="uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody"
                   type="number"
-                  label="Úhrn sociálneho poistného"
-                  hint={`Tento údaj nájdete v riadku 02a.`}
+                  label={t('Employment.socialLabel')}
+                  hint={t('Employment.rowHint', { row: '02a' })}
                 />
                 <Input
                   name="uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody"
                   type="number"
-                  label="Úhrn zdravotného poistného"
-                  hint={`Tento údaj nájdete v riadku 02b.`}
+                  label={t('Employment.healthLabel')}
+                  hint={t('Employment.rowHint', { row: '02b' })}
                 />
                 <Input
                   name="uhrnPreddavkovNaDanDohody"
                   type="number"
-                  label="Úhrn preddavkov na daň"
-                  hint={`Tento údaj nájdete v riadku 04.`}
+                  label={t('Employment.advancesLabel')}
+                  hint={t('Employment.rowHint', { row: '04' })}
                 />
                 <Input
                   name="udajeODanovomBonuseNaDietaDohody"
                   type="number"
-                  label="Údaje o daňovom bonuse na dieťa"
-                  hint={`Tento údaj nájdete v riadku 13 v časti "Úhrnná suma priznaného a vyplateného daňového bonusu".`}
+                  label={t('Employment.childBonusLabel')}
+                  hint={t('Employment.childBonusHint')}
                 />
               </>
             )}
             <button data-test="next" className="govuk-button" type="submit">
-              Pokračovať
+              {t('Common.continue')}
             </button>
           </Form>
         )}
@@ -89,61 +91,65 @@ const Dohoda: Page<DohodaUserInput> = ({
   )
 }
 
-export const validate = (values: DohodaUserInput) => {
+export const validate = (
+  values: DohodaUserInput,
+  t: Translate = translateKey,
+) => {
   const errors: Partial<FormErrors<DohodaUserInput>> = {}
 
   if (typeof values.dohoda === 'undefined') {
-    errors.dohoda = 'Vyznačte odpoveď'
+    errors.dohoda = t('Employment.errorSelectAnswer')
   }
 
   if (values.dohoda) {
     if (!values.uhrnPrijmovZoVsetkychDohod) {
-      errors.uhrnPrijmovZoVsetkychDohod =
-        'Zadajte úhrn príjmov zo všetkých dohôd'
+      errors.uhrnPrijmovZoVsetkychDohod = t('Agreements.errorIncome')
     } else if (!values.uhrnPrijmovZoVsetkychDohod.match(numberInputRegexp)) {
-      errors.uhrnPrijmovZoVsetkychDohod =
-        'Zadajte sumu príjmov vo formáte 123,45'
+      errors.uhrnPrijmovZoVsetkychDohod = t('Employment.errorIncomeFormat')
     }
 
     if (!values.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody) {
-      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody =
-        'Zadajte úhrn sociálneho poistného'
+      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody = t(
+        'Employment.errorSocial',
+      )
     } else if (
       !values.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody.match(
         numberInputRegexp,
       )
     ) {
-      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody =
-        'Zadajte sumu sociálneho poistného vo formáte 123,45'
+      errors.uhrnPovinnehoPoistnehoNaSocialnePoistenieDohody = t(
+        'Employment.errorSocialFormat',
+      )
     }
 
     if (!values.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody) {
-      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody =
-        'Zadajte úhrn zdravotného poistného'
+      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody = t(
+        'Employment.errorHealth',
+      )
     } else if (
       !values.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody.match(
         numberInputRegexp,
       )
     ) {
-      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody =
-        'Zadajte sumu zdravotného poistného vo formáte 123,45'
+      errors.uhrnPovinnehoPoistnehoNaZdravotnePoistenieDohody = t(
+        'Employment.errorHealthFormat',
+      )
     }
 
     if (!values.uhrnPreddavkovNaDanDohody) {
-      errors.uhrnPreddavkovNaDanDohody = 'Zadajte úhrn preddavkov na daň'
+      errors.uhrnPreddavkovNaDanDohody = t('Employment.errorAdvances')
     } else if (!values.uhrnPreddavkovNaDanDohody.match(numberInputRegexp)) {
-      errors.uhrnPreddavkovNaDanDohody =
-        'Zadajte sumu povinného poistného vo formáte 123,45'
+      errors.uhrnPreddavkovNaDanDohody = t('Employment.errorAdvancesFormat')
     }
 
     if (!values.udajeODanovomBonuseNaDietaDohody) {
-      errors.udajeODanovomBonuseNaDietaDohody =
-        'Zadajte údaje o daňovom bonuse na dieťa'
+      errors.udajeODanovomBonuseNaDietaDohody = t('Employment.errorChildBonus')
     } else if (
       !values.udajeODanovomBonuseNaDietaDohody.match(numberInputRegexp)
     ) {
-      errors.udajeODanovomBonuseNaDietaDohody =
-        'Zadajte sumu povinného poistného vo formáte 123,45'
+      errors.udajeODanovomBonuseNaDietaDohody = t(
+        'Employment.errorChildBonusFormat',
+      )
     }
   }
 

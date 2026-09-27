@@ -117,5 +117,12 @@
     "errorAdvancesFormat": "Zadajte sumu povinného poistného vo formáte 123,45",
     "errorChildBonus": "Zadajte údaje o daňovom bonuse na dieťa",
     "errorChildBonusFormat": "Zadajte sumu povinného poistného vo formáte 123,45"
+  },
+  "Agreements": {
+    "question": "Mali ste v roku {year} príjmy z dohôd v SR?",
+    "documentIntro": "Nasledujúce hodnoty nájdete na tlačive \"Potvrdenie o zdaniteľných príjmoch fyzickej osoby\". Ak ste mali viac dohôd, tak tieto sumy spočítajte a uveďte výsledné.",
+    "incomeLabel": "Úhrn príjmov plynúcich na základe dohôd o prácach vykonávaných mimo pracovného pomeru",
+    "incomeHint": "Napríklad na základe Dohody o vykonaní práce. Na tlačive \"Potvrdenie o zdaniteľných príjmoch fyzickej osoby zo závislej činnosti\" nájdete tento údaj v riadku 01a.",
+    "errorIncome": "Zadajte úhrn príjmov zo všetkých dohôd"
   }
 }

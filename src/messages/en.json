@@ -117,5 +117,12 @@
     "errorAdvancesFormat": "Enter the tax advances amount in the format 123,45",
     "errorChildBonus": "Enter the child tax bonus",
     "errorChildBonusFormat": "Enter the child tax bonus amount in the format 123,45"
+  },
+  "Agreements": {
+    "question": "Did you have income from work agreements (dohody) in Slovakia in {year}?",
+    "documentIntro": "You can find the following values on the income statement \"Potvrdenie o zdaniteľných príjmoch fyzickej osoby\". If you had more than one agreement, add up the amounts and enter the totals.",
+    "incomeLabel": "Total income from work agreements outside regular employment",
+    "incomeHint": "For example, from an agreement to perform work (Dohoda o vykonaní práce). On the statement \"Potvrdenie o zdaniteľných príjmoch fyzickej osoby zo závislej činnosti\", you can find this value in row 01a.",
+    "errorIncome": "Enter the total income from all work agreements"
   }
 }
