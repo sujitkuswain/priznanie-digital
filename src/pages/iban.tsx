@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { FormErrors, TaxBonusUserInput } from '../types/PageUserInputs'
 import { Form, FormikProps } from 'formik'
 import { ErrorSummary } from '../components/ErrorSummary'
@@ -14,6 +15,7 @@ import { Page } from '../components/Page'
 import { taxBonusInitialInput } from '../lib/initialValues'
 import { TaxForm } from '../types/TaxForm'
 import { BackLink } from '../components/BackLink'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Iban: Page<TaxBonusUserInput> = ({
   taxForm,
@@ -23,6 +25,8 @@ const Iban: Page<TaxBonusUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('Iban')
+  const tc = useTranslations('Common')
   const danovyBonus = taxForm.r121
   const danovyBonusUroky = taxForm.r127
   const danovyPreplatok = taxForm.r136_danovy_preplatok
@@ -32,19 +36,19 @@ const Iban: Page<TaxBonusUserInput> = ({
     <ul className="govuk-list govuk-list--bullet">
       {taxForm.mozeZiadatVyplatitDanovyBonus && (
         <li>
-          <strong>Daňový bonus: </strong>
+          <strong>{t('taxBonus')}: </strong>
           {formatCurrency(danovyBonus.toNumber())}
         </li>
       )}
       {taxForm.mozeZiadatVratitDanovyBonusUroky && (
         <li>
-          <strong>Daňový bonus na zaplatené úroky: </strong>
+          <strong>{t('mortgageBonus')}: </strong>
           {formatCurrency(danovyBonusUroky.toNumber())}
         </li>
       )}
       {taxForm.mozeZiadatVratitDanovyPreplatok && (
         <li>
-          <strong>Daňový preplatok: </strong>
+          <strong>{t('overpayment')}: </strong>
           {formatCurrency(danovyPreplatok.toNumber())}
         </li>
       )}
@@ -54,17 +58,14 @@ const Iban: Page<TaxBonusUserInput> = ({
   if (!taxForm.mozeZiadatVratitPreplatkyBonusyUroky) {
     return (
       <>
-        <p data-test="ineligible-message">
-          Nemáte nárok na vyplatenie daňového bonusu, rozdielu daňového bonusu
-          ani na vrátenie daňového preplatku
-        </p>
+        <p data-test="ineligible-message">{t('notEligible')}</p>
         <Link href={nextRoute} legacyBehavior>
           <button
             data-test="next"
             className="govuk-button govuk-!-margin-top-3"
             type="button"
           >
-            Pokračovať
+            {tc('continue')}
           </button>
         </Link>
       </>
@@ -74,7 +75,7 @@ const Iban: Page<TaxBonusUserInput> = ({
   return (
     <FormWrapper<TaxBonusUserInput>
       initialValues={taxFormUserInput}
-      validate={makeValidate(taxForm)}
+      validate={makeValidate(taxForm, t)}
       onSubmit={(values) => {
         const userInput = values.ziadamVyplatitDanovyBonusUrokPreplatok
           ? values
@@ -95,9 +96,9 @@ const Iban: Page<TaxBonusUserInput> = ({
             {taxForm.mozeZiadatVratitPreplatkyBonusyUroky && (
               <BooleanRadio
                 name="ziadamVyplatitDanovyBonusUrokPreplatok"
-                title={`Chcete požiadať o vyplatenie daňových bonusov alebo preplatkov vo výške ${formatCurrency(
-                  spolu.toNumber(),
-                )}?`}
+                title={t('question', {
+                  amount: formatCurrency(spolu.toNumber()),
+                })}
                 hint={Preplatky}
               />
             )}
@@ -107,7 +108,7 @@ const Iban: Page<TaxBonusUserInput> = ({
                 name="iban"
                 type="text"
                 label="IBAN"
-                hint="Účet musí byť vedený v banke na Slovensku pod vašim menom."
+                hint={t('ibanHint')}
                 maxLength={29}
                 onChange={(event) => {
                   const iban = formatIban(
@@ -120,7 +121,7 @@ const Iban: Page<TaxBonusUserInput> = ({
             )}
 
             <button data-test="next" className="govuk-button" type="submit">
-              Pokračovať
+              {tc('continue')}
             </button>
           </Form>
         </>
@@ -132,25 +133,25 @@ const Iban: Page<TaxBonusUserInput> = ({
 export default Iban
 
 export const makeValidate =
-  (taxForm: TaxForm) => (values: TaxBonusUserInput) => {
+  (taxForm: TaxForm, t: Translate = slovakTranslator('Iban')) =>
+  (values: TaxBonusUserInput) => {
     const errors: Partial<FormErrors<TaxBonusUserInput>> = {}
 
     if (
       taxForm.mozeZiadatVratitPreplatkyBonusyUroky &&
       typeof values.ziadamVyplatitDanovyBonusUrokPreplatok === 'undefined'
     ) {
-      errors.ziadamVyplatitDanovyBonusUrokPreplatok =
-        'Vyznačte odpoveď na daňový bonus alebo preplatok'
+      errors.ziadamVyplatitDanovyBonusUrokPreplatok = t('errorSelectAnswer')
     }
 
     if (values.ziadamVyplatitDanovyBonusUrokPreplatok) {
       if (!values.iban || values.iban === '') {
         // Medzinárodné bankové číslo účtu (angl. International Bank Account Number, skr. IBAN)
-        errors.iban = 'Zadajte váš IBAN'
+        errors.iban = t('errorIban')
       } else if (!validateIbanFormat(values.iban)) {
-        errors.iban = 'Zadajte váš IBAN v správnom formáte'
+        errors.iban = t('errorIbanFormat')
       } else if (!validateIbanCountry(values.iban)) {
-        errors.iban = 'Zadajte slovenský IBAN'
+        errors.iban = t('errorIbanCountry')
       }
     }
 
