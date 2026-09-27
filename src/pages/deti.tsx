@@ -48,7 +48,7 @@ import Decimal from 'decimal.js'
 import { Warning } from '../components/Warning'
 import { ExternalLink } from '../components/ExternalLink'
 import { UserInput } from '../types/UserInput'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 // month names stay Slovak in form data; only the displayed label is translated
 const useMonthName = () => {
@@ -579,7 +579,7 @@ interface ChildrenFormErrors {
 
 export const validate = (
   values: ChildrenUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Children'),
   monthName: (month: string) => string = (month) => month,
 ) => {
   const errors: ChildrenFormErrors = {}

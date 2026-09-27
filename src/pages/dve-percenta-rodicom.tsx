@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Form, useField } from 'formik'
 import { FormWrapper, Input, Checkbox } from '../components/FormComponents'
 import { DvePercentaRodicomUserInput } from '../types/PageUserInputs'
@@ -19,12 +20,14 @@ import RadioGroup from '../components/radio/RadioGroup'
 import Radio from '../components/radio/Radio'
 import RadioConditional from '../components/radio/RadioConditional'
 import Fieldset from '../components/fieldset/Fieldset'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 interface AdoptionCheckboxProps {
   labelSingular?: boolean
 }
 
 const AdoptionCheckbox = ({ labelSingular = false }: AdoptionCheckboxProps) => {
+  const t = useTranslations('ParentsTwoPercent')
   const [field] = useField('dve_percenta_rodicom_nahradna_starostlivost')
   const isChecked = field.value === true
 
@@ -32,16 +35,11 @@ const AdoptionCheckbox = ({ labelSingular = false }: AdoptionCheckboxProps) => {
     <div className="govuk-!-margin-top-6">
       <Checkbox
         name="dve_percenta_rodicom_nahradna_starostlivost"
-        label={
-          labelSingular
-            ? 'Bol/a som osvojený/á rodičom'
-            : 'Bol/a som osvojený/á rodičmi'
-        }
+        label={labelSingular ? t('adoptedByParent') : t('adoptedByParents')}
       />
       {isChecked && (
         <p className="govuk-hint govuk-!-margin-top-2">
-          K daňovému priznaniu je potrebné priložiť doklad preukazujúci
-          osvojenie.
+          {t('adoptionAttachment')}
         </p>
       )}
     </div>
@@ -55,12 +53,14 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('ParentsTwoPercent')
+  const tc = useTranslations('Common')
   const submitButtonRef = useRef(null)
   const calculatedTax = calculate(taxFormUserInput)
 
   const previousPageLink = (
     <Link href={previousRoute} data-test="back" className="govuk-back-link">
-      Späť
+      {tc('back')}
     </Link>
   )
 
@@ -68,18 +68,15 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
     return (
       <>
         {previousPageLink}
-        <h1 className="govuk-heading-l">
-          Poukázanie 2% zaplatenej dane rodičom
-        </h1>
+        <h1 className="govuk-heading-l">{t('heading')}</h1>
         <p data-test="ineligible-message">
-          Ľutujeme, nespĺňate podmienky na poukázanie čiastky dane, nakoľko by
-          táto čiastka neprekočila{' '}
-          {formatCurrency(MIN_2_PERCENT_CALCULATED_DONATION)}. Dôvodom je
-          nepostačujúca výška zaplatenej dane.
+          {t('ineligible', {
+            amount: formatCurrency(MIN_2_PERCENT_CALCULATED_DONATION),
+          })}
         </p>
         <Link href={nextRoute} legacyBehavior>
           <button className="govuk-button govuk-!-margin-top-4" type="button">
-            Pokračovať
+            {tc('continue')}
           </button>
         </Link>
       </>
@@ -91,7 +88,7 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
       {previousPageLink}
       <FormWrapper<DvePercentaRodicomUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           setTaxFormUserInput(values)
           router.push(nextRoute)
@@ -102,9 +99,13 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
             <ErrorSummary<DvePercentaRodicomUserInput> errors={props.errors} />
             <Form className="form" noValidate>
               <Fieldset
-                title={`Chcete poukázať 2% dane rodičom, ktorí dovŕšili dôchodkový vek?`}
+                title={t('question')}
                 error={props.errors.dve_percenta_rodicom}
-                hint={`Môžete poukázať ${formatCurrency(calculatedTax.suma_2_percenta.toNumber())}, jednému alebo obidvom rodičom. Poukázanie 2% dane rodičom neovplyvňuje možnosť poukázať 2% alebo 3% dane neziskovej organizácii.`}
+                hint={t('questionHint', {
+                  amount: formatCurrency(
+                    calculatedTax.suma_2_percenta.toNumber(),
+                  ),
+                })}
               >
                 <RadioGroup
                   value={props.values.dve_percenta_rodicom ?? ''}
@@ -150,31 +151,36 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
                 >
                   <Radio
                     name="dve_percenta_rodicom-input-obidvom"
-                    label="Áno, obidvom rodičom"
+                    label={t('answerBoth')}
                     value="obidvom"
                   />
                   <RadioConditional forValue="obidvom">
                     <p className="govuk-hint">
-                      Každý rodič dostane{' '}
-                      {formatCurrency(calculatedTax.suma_2_percenta.toNumber())}
+                      {t('eachParentGets', {
+                        amount: formatCurrency(
+                          calculatedTax.suma_2_percenta.toNumber(),
+                        ),
+                      })}
                     </p>
                     <div className="govuk-grid-row">
                       <div className="govuk-grid-column-one-half">
-                        <h2 className="govuk-heading-m">Údaje o rodičovi 1</h2>
+                        <h2 className="govuk-heading-m">
+                          {t('parentHeading', { number: 1 })}
+                        </h2>
                         <Input
                           name="dve_percenta_rodicA.meno"
                           type="text"
-                          label="Meno"
+                          label={t('firstName')}
                         />
                         <Input
                           name="dve_percenta_rodicA.priezvisko"
                           type="text"
-                          label="Priezvisko"
+                          label={t('lastName')}
                         />
                         <Input
                           name="dve_percenta_rodicA.rodneCislo"
                           type="text"
-                          label="Rodné číslo"
+                          label={t('birthNumber')}
                           maxLength={RODNE_CISLO_DLZKA}
                           onChange={(event) => {
                             const rodneCislo = formatRodneCislo(
@@ -191,21 +197,23 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
                         />
                       </div>
                       <div className="govuk-grid-column-one-half">
-                        <h2 className="govuk-heading-m">Údaje o rodičovi 2</h2>
+                        <h2 className="govuk-heading-m">
+                          {t('parentHeading', { number: 2 })}
+                        </h2>
                         <Input
                           name="dve_percenta_rodicB.meno"
                           type="text"
-                          label="Meno"
+                          label={t('firstName')}
                         />
                         <Input
                           name="dve_percenta_rodicB.priezvisko"
                           type="text"
-                          label="Priezvisko"
+                          label={t('lastName')}
                         />
                         <Input
                           name="dve_percenta_rodicB.rodneCislo"
                           type="text"
-                          label="Rodné číslo"
+                          label={t('birthNumber')}
                           maxLength={RODNE_CISLO_DLZKA}
                           onChange={(event) => {
                             const rodneCislo = formatRodneCislo(
@@ -227,30 +235,35 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
 
                   <Radio
                     name="dve_percenta_rodicom-input-jednemu"
-                    label="Áno, iba jednému rodičovi"
+                    label={t('answerOne')}
                     value="jednemu"
                   />
                   <RadioConditional forValue="jednemu">
                     <p className="govuk-hint">
-                      Rodič dostane{' '}
-                      {formatCurrency(calculatedTax.suma_2_percenta.toNumber())}
+                      {t('parentGets', {
+                        amount: formatCurrency(
+                          calculatedTax.suma_2_percenta.toNumber(),
+                        ),
+                      })}
                     </p>
                     <div>
-                      <h2 className="govuk-heading-m">Údaje o rodičovi</h2>
+                      <h2 className="govuk-heading-m">
+                        {t('parentHeadingSingle')}
+                      </h2>
                       <Input
                         name="dve_percenta_rodicA.meno"
                         type="text"
-                        label="Meno"
+                        label={t('firstName')}
                       />
                       <Input
                         name="dve_percenta_rodicA.priezvisko"
                         type="text"
-                        label="Priezvisko"
+                        label={t('lastName')}
                       />
                       <Input
                         name="dve_percenta_rodicA.rodneCislo"
                         type="text"
-                        label="Rodné číslo"
+                        label={t('birthNumber')}
                         maxLength={RODNE_CISLO_DLZKA}
                         onChange={(event) => {
                           const rodneCislo = formatRodneCislo(
@@ -270,32 +283,20 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
 
                   <Radio
                     name="dve_percenta_rodicom-input-nie"
-                    label="Nie"
+                    label={tc('no')}
                     value="nie"
                   />
                 </RadioGroup>
               </Fieldset>
-              <Details title="Kto sa považuje za rodiča daňovníka?">
+              <Details title={t('whoTitle')}>
                 <p className="govuk-hint">
-                  Za rodiča daňovníka sa považuje osoba, ktorá bola najneskôr k
-                  31.12.{TAX_YEAR}:
+                  {t('whoIntro', { year: TAX_YEAR })}
                   <ul>
-                    <li>poberateľom starobného dôchodku,</li>
-                    <li>
-                      poberateľom invalidného dôchodku vyplácaného po dovŕšení
-                      dôchodkového veku,
-                    </li>
-                    <li>
-                      poberateľom výsluhového dôchodku vyplácaného po dovŕšení
-                      dôchodkového veku,
-                    </li>
-                    <li>
-                      poberateľom invalidného výsluhového dôchodku vyplácaného
-                      po dovŕšení dôchodkového veku,
-                    </li>
+                    {(t.raw('whoPensions') as string[]).map((pension) => (
+                      <li key={pension}>{pension}</li>
+                    ))}
                   </ul>
-                  pričom daňovník je vlastným alebo osvojeným dieťaťom tohto
-                  rodiča.
+                  {t('whoOutro')}
                 </p>
               </Details>
               <button
@@ -304,7 +305,7 @@ const DvePercentaRodicom: Page<DvePercentaRodicomUserInput> = ({
                 type="submit"
                 ref={submitButtonRef}
               >
-                Pokračovať
+                {tc('continue')}
               </button>
             </Form>
           </>
@@ -328,11 +329,14 @@ type Errors = {
     : string
 }
 
-export const validate = (values: DvePercentaRodicomUserInput): Errors => {
+export const validate = (
+  values: DvePercentaRodicomUserInput,
+  t: Translate = slovakTranslator('ParentsTwoPercent'),
+): Errors => {
   const errors: Errors = {}
 
   if (!values.dve_percenta_rodicom) {
-    errors.dve_percenta_rodicom = 'Vyznačte odpoveď'
+    errors.dve_percenta_rodicom = t('errorSelectAnswer')
   }
 
   if (
@@ -342,15 +346,15 @@ export const validate = (values: DvePercentaRodicomUserInput): Errors => {
     const rodicAErrors: ParentErrors = {}
 
     if (!values.dve_percenta_rodicA?.meno) {
-      rodicAErrors.meno = 'Zadajte meno rodiča'
+      rodicAErrors.meno = t('errorFirstName')
     }
     if (!values.dve_percenta_rodicA?.priezvisko) {
-      rodicAErrors.priezvisko = 'Zadajte priezvisko rodiča'
+      rodicAErrors.priezvisko = t('errorLastName')
     }
     if (!values.dve_percenta_rodicA?.rodneCislo) {
-      rodicAErrors.rodneCislo = 'Zadajte rodné číslo rodiča'
+      rodicAErrors.rodneCislo = t('errorBirthNumber')
     } else if (!validateRodneCislo(values.dve_percenta_rodicA.rodneCislo)) {
-      rodicAErrors.rodneCislo = 'Zadané rodné číslo nie je správne'
+      rodicAErrors.rodneCislo = t('errorBirthNumberInvalid')
     }
 
     if (Object.keys(rodicAErrors).length > 0) {
@@ -362,15 +366,15 @@ export const validate = (values: DvePercentaRodicomUserInput): Errors => {
     const rodicBErrors: ParentErrors = {}
 
     if (!values.dve_percenta_rodicB?.meno) {
-      rodicBErrors.meno = 'Zadajte meno rodiča'
+      rodicBErrors.meno = t('errorFirstName')
     }
     if (!values.dve_percenta_rodicB?.priezvisko) {
-      rodicBErrors.priezvisko = 'Zadajte priezvisko rodiča'
+      rodicBErrors.priezvisko = t('errorLastName')
     }
     if (!values.dve_percenta_rodicB?.rodneCislo) {
-      rodicBErrors.rodneCislo = 'Zadajte rodné číslo rodiča'
+      rodicBErrors.rodneCislo = t('errorBirthNumber')
     } else if (!validateRodneCislo(values.dve_percenta_rodicB.rodneCislo)) {
-      rodicBErrors.rodneCislo = 'Zadané rodné číslo nie je správne'
+      rodicBErrors.rodneCislo = t('errorBirthNumberInvalid')
     }
 
     if (Object.keys(rodicBErrors).length > 0) {
@@ -389,8 +393,7 @@ export const validate = (values: DvePercentaRodicomUserInput): Errors => {
       if (!errors.dve_percenta_rodicB) {
         errors.dve_percenta_rodicB = {}
       }
-      errors.dve_percenta_rodicB.rodneCislo =
-        'Rodné číslo oboch rodičov nemôže byť rovnaké'
+      errors.dve_percenta_rodicB.rodneCislo = t('errorSameBirthNumber')
     }
   }
 

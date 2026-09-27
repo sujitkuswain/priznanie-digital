@@ -9,7 +9,7 @@ import { Page } from '../components/Page'
 import { dohodaUserInputInitialValues } from '../lib/initialValues'
 import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Dohoda: Page<DohodaUserInput> = ({
   setTaxFormUserInput,
@@ -93,7 +93,7 @@ const Dohoda: Page<DohodaUserInput> = ({
 
 export const validate = (
   values: DohodaUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator(),
 ) => {
   const errors: Partial<FormErrors<DohodaUserInput>> = {}
 

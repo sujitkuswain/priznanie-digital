@@ -14,7 +14,7 @@ import Fieldset from '../components/fieldset/Fieldset'
 import RadioGroup from '../components/radio/RadioGroup'
 import Radio from '../components/radio/Radio'
 import RadioConditional from '../components/radio/RadioConditional'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Dochodok: Page<PensionUserInput> = ({
   setTaxFormUserInput,
@@ -103,7 +103,7 @@ const Dochodok: Page<PensionUserInput> = ({
 
 export const validate = (
   values: PensionUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Pension'),
 ) => {
   const errors: Partial<FormErrors<PensionUserInput>> = {}
 

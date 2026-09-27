@@ -10,7 +10,7 @@ import { Page } from '../components/Page'
 import { partnerUserInitialValues } from '../lib/initialValues'
 import { BackLink } from '../components/BackLink'
 import { ErrorSummary } from '../components/ErrorSummary'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Partner: Page<PartnerUserInput> = ({
   setTaxFormUserInput,
@@ -71,7 +71,7 @@ const Partner: Page<PartnerUserInput> = ({
 
 export const validate = (
   values: PartnerUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Partner'),
 ) => {
   const errors: Partial<FormErrors<PartnerUserInput>> = {}
 

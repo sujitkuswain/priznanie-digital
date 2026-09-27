@@ -360,5 +360,38 @@
     "errorPaidInterest": "Zadajte zaplatené úroky",
     "errorPaidInterestFormat": "Zadajte zaplatené úroky vo formáte 123,45",
     "errorPaidInterestMax": "Zaplatené úroky môžu byť maximálne 9999,99"
+  },
+  "ParentsTwoPercent": {
+    "adoptedByParent": "Bol/a som osvojený/á rodičom",
+    "adoptedByParents": "Bol/a som osvojený/á rodičmi",
+    "adoptionAttachment": "K daňovému priznaniu je potrebné priložiť doklad preukazujúci osvojenie.",
+    "heading": "Poukázanie 2% zaplatenej dane rodičom",
+    "ineligible": "Ľutujeme, nespĺňate podmienky na poukázanie čiastky dane, nakoľko by táto čiastka neprekočila {amount}. Dôvodom je nepostačujúca výška zaplatenej dane.",
+    "question": "Chcete poukázať 2% dane rodičom, ktorí dovŕšili dôchodkový vek?",
+    "questionHint": "Môžete poukázať {amount}, jednému alebo obidvom rodičom. Poukázanie 2% dane rodičom neovplyvňuje možnosť poukázať 2% alebo 3% dane neziskovej organizácii.",
+    "answerBoth": "Áno, obidvom rodičom",
+    "answerOne": "Áno, iba jednému rodičovi",
+    "eachParentGets": "Každý rodič dostane {amount}",
+    "parentGets": "Rodič dostane {amount}",
+    "parentHeading": "Údaje o rodičovi {number}",
+    "parentHeadingSingle": "Údaje o rodičovi",
+    "firstName": "Meno",
+    "lastName": "Priezvisko",
+    "birthNumber": "Rodné číslo",
+    "whoTitle": "Kto sa považuje za rodiča daňovníka?",
+    "whoIntro": "Za rodiča daňovníka sa považuje osoba, ktorá bola najneskôr k 31.12.{year}:",
+    "whoPensions": [
+      "poberateľom starobného dôchodku,",
+      "poberateľom invalidného dôchodku vyplácaného po dovŕšení dôchodkového veku,",
+      "poberateľom výsluhového dôchodku vyplácaného po dovŕšení dôchodkového veku,",
+      "poberateľom invalidného výsluhového dôchodku vyplácaného po dovŕšení dôchodkového veku,"
+    ],
+    "whoOutro": "pričom daňovník je vlastným alebo osvojeným dieťaťom tohto rodiča.",
+    "errorSelectAnswer": "Vyznačte odpoveď",
+    "errorFirstName": "Zadajte meno rodiča",
+    "errorLastName": "Zadajte priezvisko rodiča",
+    "errorBirthNumber": "Zadajte rodné číslo rodiča",
+    "errorBirthNumberInvalid": "Zadané rodné číslo nie je správne",
+    "errorSameBirthNumber": "Rodné číslo oboch rodičov nemôže byť rovnaké"
   }
 }

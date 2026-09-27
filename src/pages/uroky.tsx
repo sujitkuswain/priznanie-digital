@@ -12,7 +12,7 @@ import { validateUrokyBonusForm } from '../lib/validateUrokyBonusForm'
 import { TAX_YEAR, UROKY_POCET_ROKOV } from '../lib/calculation'
 import { numberInputRegexp, parseInputNumber } from '../lib/utils'
 import Decimal from 'decimal.js'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Uroky: Page<UrokyUserInput> = ({
   taxFormUserInput,
@@ -76,7 +76,7 @@ const isInteger = (value: string) => {
 
 export const validate = (
   values: UrokyUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Mortgage'),
 ) => {
   const errors: Partial<FormErrors<UrokyUserInput>> = {}
   if (typeof values.r035_uplatnuje_uroky === 'undefined') {

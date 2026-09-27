@@ -10,7 +10,7 @@ import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
 import TooltipHint from '../components/TooltipHint'
 import styles from './zamestnanie.module.css'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Zamestnanie: Page<EmployedUserInput> = ({
   setTaxFormUserInput,
@@ -157,7 +157,7 @@ const Zamestnanie: Page<EmployedUserInput> = ({
 
 export const validate = (
   values: EmployedUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Employment'),
 ) => {
   const errors: Partial<FormErrors<EmployedUserInput>> = {}
 

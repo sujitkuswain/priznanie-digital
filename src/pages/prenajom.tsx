@@ -10,7 +10,7 @@ import { BackLink } from '../components/BackLink'
 import { ErrorSummary } from '../components/ErrorSummary'
 import { OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI } from '../lib/calculation'
 import { numberInputRegexp } from '../lib/utils'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const Rent: Page<RentUserInput> = ({
   setTaxFormUserInput,
@@ -68,7 +68,7 @@ const Rent: Page<RentUserInput> = ({
 
 export const validate = (
   values: RentUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('Rent'),
 ) => {
   const errors: Partial<FormErrors<RentUserInput>> = {}
 

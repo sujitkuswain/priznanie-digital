@@ -10,7 +10,7 @@ import { BackLink } from '../components/BackLink'
 import { TAX_YEAR } from '../lib/calculation'
 import { incomeAndExpenseInitialValues } from '../lib/initialValues'
 import { Details } from '../components/Details'
-import { Translate, translateKey } from '../lib/i18n'
+import { Translate, slovakTranslator } from '../lib/i18n'
 
 const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
   taxFormUserInput,
@@ -100,7 +100,7 @@ const PrijmyAVydavky: Page<IncomeAndExpenseUserInput> = ({
 
 export const validate = (
   values: IncomeAndExpenseUserInput,
-  t: Translate = translateKey,
+  t: Translate = slovakTranslator('IncomeAndExpenses'),
 ) => {
   const errors: Partial<FormErrors<IncomeAndExpenseUserInput>> = {}
 

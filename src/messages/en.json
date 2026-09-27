@@ -360,5 +360,38 @@
     "errorPaidInterest": "Enter the interest paid",
     "errorPaidInterestFormat": "Enter the interest paid in the format 123,45",
     "errorPaidInterestMax": "Interest paid can be at most 9999,99"
+  },
+  "ParentsTwoPercent": {
+    "adoptedByParent": "I was adopted by this parent",
+    "adoptedByParents": "I was adopted by these parents",
+    "adoptionAttachment": "You must attach a document proving the adoption to your tax return.",
+    "heading": "Assign 2% of your paid tax to your parents",
+    "ineligible": "Sorry, you are not eligible to assign part of your tax, because the amount would not exceed {amount}. This is because the tax you paid is too low.",
+    "question": "Do you want to assign 2% of your tax to your parents who have reached retirement age?",
+    "questionHint": "You can assign {amount} to one or both parents. Assigning 2% of your tax to your parents does not affect your option to assign 2% or 3% of your tax to a non-profit organisation.",
+    "answerBoth": "Yes, to both parents",
+    "answerOne": "Yes, to one parent only",
+    "eachParentGets": "Each parent will receive {amount}",
+    "parentGets": "The parent will receive {amount}",
+    "parentHeading": "Parent {number} details",
+    "parentHeadingSingle": "Parent details",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "birthNumber": "Birth number (rodné číslo)",
+    "whoTitle": "Who is considered the taxpayer's parent?",
+    "whoIntro": "A taxpayer's parent is a person who, by 31.12.{year} at the latest, was:",
+    "whoPensions": [
+      "receiving an old-age pension,",
+      "receiving a disability pension paid after reaching retirement age,",
+      "receiving a service pension paid after reaching retirement age,",
+      "receiving a disability service pension paid after reaching retirement age,"
+    ],
+    "whoOutro": "and the taxpayer is the natural or adopted child of this parent.",
+    "errorSelectAnswer": "Select an answer",
+    "errorFirstName": "Enter the parent's first name",
+    "errorLastName": "Enter the parent's last name",
+    "errorBirthNumber": "Enter the parent's birth number",
+    "errorBirthNumberInvalid": "The birth number is not valid",
+    "errorSameBirthNumber": "Both parents cannot have the same birth number"
   }
 }
