@@ -538,6 +538,18 @@
       "neplatí": "not applicable"
     }
   },
+  "Iban": {
+    "taxBonus": "Tax bonus",
+    "mortgageBonus": "Tax bonus on paid mortgage interest",
+    "overpayment": "Tax overpayment",
+    "notEligible": "You are not entitled to a payout of the tax bonus, the tax bonus difference or a refund of a tax overpayment",
+    "question": "Do you want to request a payout of tax bonuses or overpayments totalling {amount}?",
+    "ibanHint": "The account must be held at a bank in Slovakia and in your name.",
+    "errorSelectAnswer": "Select an answer about the tax bonus or overpayment",
+    "errorIban": "Enter your IBAN",
+    "errorIbanFormat": "Enter your IBAN in the correct format",
+    "errorIbanCountry": "Enter a Slovak IBAN"
+  },
   "Continue": {
     "heading": "Your tax return is ready",
     "intro": "Download the XML file with your tax return.",

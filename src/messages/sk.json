@@ -538,6 +538,18 @@
       "neplatí": "neplatí"
     }
   },
+  "Iban": {
+    "taxBonus": "Daňový bonus",
+    "mortgageBonus": "Daňový bonus na zaplatené úroky",
+    "overpayment": "Daňový preplatok",
+    "notEligible": "Nemáte nárok na vyplatenie daňového bonusu, rozdielu daňového bonusu ani na vrátenie daňového preplatku",
+    "question": "Chcete požiadať o vyplatenie daňových bonusov alebo preplatkov vo výške {amount}?",
+    "ibanHint": "Účet musí byť vedený v banke na Slovensku pod vašim menom.",
+    "errorSelectAnswer": "Vyznačte odpoveď na daňový bonus alebo preplatok",
+    "errorIban": "Zadajte váš IBAN",
+    "errorIbanFormat": "Zadajte váš IBAN v správnom formáte",
+    "errorIbanCountry": "Zadajte slovenský IBAN"
+  },
   "Continue": {
     "heading": "Vaše daňové priznanie je pripravené",
     "intro": "Stiahnite si súbor XML s daňovým priznaním.",
