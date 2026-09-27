@@ -556,6 +556,41 @@
     "downloadXml": "Download XML",
     "sessionExpired": "Your session has expired",
     "startAgain": "Start again",
-    "slovakVersionNote": "The Slovak version of this app works differently at this step: it sends you to Návody.Digital, which emails you the file and a step-by-step submission guide in Slovak only. Switching to SK on this page takes you there."
+    "slovakVersionNote": "The Slovak version of this app works differently at this step: it sends you to Návody.Digital, which emails you the file and a step-by-step submission guide in Slovak only. Switching to SK on this page takes you there.",
+    "guideHeading": "How to submit your tax return",
+    "guideIntro": "Submit the downloaded XML file on the Financial Administration (Finančná správa) portal. The portal is in Slovak, so button names are shown in Slovak with their meaning in English.",
+    "guideSource": "Based on the Slovak guide by <link>Návody.Digital</link>, which also has screenshots.",
+    "guide": {
+      "login": {
+        "title": "Log in to the Financial Administration portal",
+        "text": "Open the <portal>personal internet zone of the Financial Administration</portal>. Choose the login type <b>Portál slovensko.sk</b> and log in with your ID card (eID). If you have signed an agreement on electronic communication with the Financial Administration, you can also use your agreed username and password."
+      },
+      "form": {
+        "title": "Choose the tax return form",
+        "text": "Choose <b>Daňové priznanie k dani z príjmov fyzickej osoby (typ B)</b> (income tax return for individuals, type B) in the section <b>Dane z príjmov fyzickej osoby</b> (personal income tax), for the tax period 2025 (valid from 1.1.2026)."
+      },
+      "load": {
+        "title": "Load your tax return from the XML file",
+        "text": "Click <b>Načítať zo súboru</b> (load from file) on the left. Confirm with <b>Áno</b> (yes) that existing data will be deleted, then select the downloaded XML file (probably in your Downloads folder). Then click <b>Kontrolovať</b> (check) and fix any errors, otherwise you cannot submit the form. A field marked as wrong may just be a rounding difference: double-clicking some fields corrects them automatically."
+      },
+      "attachments": {
+        "title": "Add required attachments",
+        "text": "If you need attachments, open <b>Prílohy/Správa príloh</b> (attachments) on the left, choose <b>Pridať novú prílohu z disku</b> (add a new attachment from disk), select the file and confirm with <b>Načítať zo súboru</b>. PDF and JPG files are accepted. You may need, for example: your children's birth certificates, the income statement from your employer if you are also employed, confirmation of 3rd pillar pension payments, the bank confirmation of paid mortgage interest, or the volunteering confirmation if you assign 3% of your tax."
+      },
+      "sign": {
+        "title": "Sign and submit",
+        "text": "You need the <autogram>Autogram app with its browser extension</autogram> or <autogramMobile>Autogram on your mobile</autogramMobile>. If your ID card is not activated for signing, you first need to <certificates>issue signing certificates</certificates> (one-time). Click <b>Podpísať</b> (sign) on the left and sign with Autogram. Then click <b>Podať podpísané</b> (submit signed) and confirm the submission."
+      },
+      "pay": {
+        "title": "Pay the tax",
+        "text": "Pay the tax by the filing deadline. After submitting, you can pay by card or via a bank payment gateway using <b>Zaplatiť</b> (pay) in the bottom left of the form. If you have an overpayment, this option is not shown. You can also pay by bank transfer to your personal taxpayer account (osobný účet daňovníka); find the account number on the <payment>Financial Administration website</payment>."
+      },
+      "verify": {
+        "title": "Check that it was submitted",
+        "text": "Go back to your personal internet zone and open <b>História komunikácie</b> (communication history) and then <b>Odoslané dokumenty</b> (sent documents). Your tax return should have the status <b>Prijaté a potvrdené</b> (received and confirmed)."
+      }
+    },
+    "guideStepOf": "Step {step} of {total}",
+    "guideNext": "Next step"
   }
 }

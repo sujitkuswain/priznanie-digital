@@ -556,6 +556,41 @@
     "downloadXml": "Stiahnuť XML",
     "sessionExpired": "Vaša session vypršala",
     "startAgain": "Začnite znovu",
-    "slovakVersionNote": "Slovenská verzia aplikácie v tomto kroku pokračuje na Návody.Digital, kde dostanete súbor aj návod na podanie e-mailom."
+    "slovakVersionNote": "Slovenská verzia aplikácie v tomto kroku pokračuje na Návody.Digital, kde dostanete súbor aj návod na podanie e-mailom.",
+    "guideHeading": "Ako podať daňové priznanie",
+    "guideIntro": "Stiahnutý súbor XML podajte na portáli Finančnej správy.",
+    "guideSource": "Podľa návodu od <link>Návody.Digital</link>, kde nájdete aj obrázky.",
+    "guide": {
+      "login": {
+        "title": "Prihlásiť sa na Finančnú správu",
+        "text": "Prihláste sa do <portal>osobnej internetovej zóny Finančnej správy</portal>. Zvoľte typ prihlásenia <b>Portál slovensko.sk</b> a prihláste sa pomocou občianskeho preukazu. Ak máte podpísanú dohodu o elektronickej komunikácii s finančnou správou, môžete použiť aj dohodnuté meno a heslo."
+      },
+      "form": {
+        "title": "Vybrať formulár daňového priznania",
+        "text": "Vyberte tlačivo <b>Daňové priznanie k dani z príjmov fyzickej osoby (typ B)</b> v sekcii <b>Dane z príjmov fyzickej osoby</b>, pre zdaňovacie obdobie 2025 (platné od 1.1.2026)."
+      },
+      "load": {
+        "title": "Načítať daňové priznanie zo súboru",
+        "text": "Kliknite na <b>Načítať zo súboru</b> na ľavom okraji. Potvrďte <b>Áno</b>, že budú vymazané existujúce údaje, a vyberte stiahnutý súbor XML (pravdepodobne v adresári Stiahnuté). Potom použite tlačidlo <b>Kontrolovať</b> a opravte chyby, inak nebudete môcť formulár odoslať. Nesprávne označené políčko môže byť chyba zaokrúhľovania, niektoré sa opravia dvojklikom."
+      },
+      "attachments": {
+        "title": "Pridať potrebné prílohy",
+        "text": "Prílohy pridáte v časti <b>Prílohy/Správa príloh</b> voľbou <b>Pridať novú prílohu z disku</b>, výberom súboru a potvrdením <b>Načítať zo súboru</b>. Akceptované sú súbory PDF a JPG. Môžete potrebovať napríklad rodný list dieťaťa, potvrdenie príjmov od zamestnávateľa, potvrdenie o platbách doplnkového dôchodkového sporenia, potvrdenie banky o zaplatených úrokoch alebo potvrdenie o dobrovoľníckej činnosti pri poukázaní 3%."
+      },
+      "sign": {
+        "title": "Podpísať a podať daňové priznanie",
+        "text": "Budete potrebovať <autogram>aplikáciu Autogram a rozšírenie do prehliadača</autogram> alebo <autogramMobile>Autogram v mobile</autogramMobile>. Ak nemáte aktivovaný občiansky preukaz na podpisovanie, je nutné si jednorázovo <certificates>vydať certifikáty na podpisovanie</certificates>. Kliknite na <b>Podpísať</b> a podpíšte aplikáciou Autogram. Následne kliknite na <b>Podať podpísané</b> a potvrďte odoslanie."
+      },
+      "pay": {
+        "title": "Zaplatiť daň",
+        "text": "Daň je potrebné zaplatiť k termínu podania daňového priznania. Po podaní môžete zaplatiť kartou alebo cez platobnú bránu banky možnosťou <b>Zaplatiť</b> v ľavom dolnom rohu formulára. Pri daňovom preplatku sa táto možnosť nezobrazí. Môžete zaplatiť aj prevodom na osobný účet daňovníka, číslo účtu zistíte na <payment>webe Finančnej správy</payment>."
+      },
+      "verify": {
+        "title": "Overiť odoslanie podania",
+        "text": "V osobnej internetovej zóne v sekcii <b>História komunikácie</b> skontrolujte v <b>Odoslané dokumenty</b>, že daňové priznanie má stav <b>Prijaté a potvrdené</b>."
+      }
+    },
+    "guideStepOf": "Krok {step} z {total}",
+    "guideNext": "Ďalší krok"
   }
 }

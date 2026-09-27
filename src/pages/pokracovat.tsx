@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import getConfig from 'next/config'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import fileDownload from 'js-file-download'
+import { ExternalLink } from '../components/ExternalLink'
 import { Page } from '../components/Page'
 import { TaxForm } from '../types/TaxForm'
 import { convertToXML } from '../lib/xml/xmlConverter'
@@ -82,6 +83,101 @@ const buildFields = (taxForm: TaxForm): RedirectField[] => {
   ]
 }
 
+const GUIDE_STEPS = [
+  'login',
+  'form',
+  'load',
+  'attachments',
+  'sign',
+  'pay',
+  'verify',
+] as const
+
+const externalLink = (href: string) => (chunks) => (
+  <ExternalLink href={href}>{chunks}</ExternalLink>
+)
+
+// tags used in the guide texts: <b> for portal button labels, links to external services
+const richTags = {
+  b: (chunks) => <b>{chunks}</b>,
+  portal: externalLink(
+    'https://www.financnasprava.sk/sk/osobna-internetova-zona/katalogy/katalog-formularov',
+  ),
+  autogram: externalLink(
+    'https://sluzby.slovensko.digital/autogram-na-statnych-weboch/',
+  ),
+  autogramMobile: externalLink(
+    'https://sluzby.slovensko.digital/autogram-v-mobile/index.html',
+  ),
+  certificates: externalLink(
+    'https://navody.digital/zivotne-situacie/aktivacia-eid/krok/certifikaty',
+  ),
+  payment: externalLink(
+    'https://www.financnasprava.sk/sk/infoservis/platenie-dani',
+  ),
+}
+
+// one step at a time, like the original Návody.Digital guide
+const SubmissionGuide = () => {
+  const t = useTranslations('Continue')
+  const tc = useTranslations('Common')
+  const [current, setCurrent] = useState(0)
+  const step = GUIDE_STEPS[current]
+
+  return (
+    <div className="govuk-grid-row">
+      <div className="govuk-grid-column-one-third">
+        <ol className="govuk-list govuk-list--number">
+          {GUIDE_STEPS.map((name, index) => (
+            <li key={name}>
+              {index === current ? (
+                <strong>{t(`guide.${name}.title`)}</strong>
+              ) : (
+                <a
+                  href={`#guide-${name}`}
+                  className="govuk-link"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    setCurrent(index)
+                  }}
+                >
+                  {t(`guide.${name}.title`)}
+                </a>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="govuk-grid-column-two-thirds" id={`guide-${step}`}>
+        <span className="govuk-caption-m">
+          {t('guideStepOf', { step: current + 1, total: GUIDE_STEPS.length })}
+        </span>
+        <h3 className="govuk-heading-m">{t(`guide.${step}.title`)}</h3>
+        <p>{t.rich(`guide.${step}.text`, richTags)}</p>
+        {current > 0 && (
+          <button
+            type="button"
+            className="govuk-button btn-secondary govuk-!-margin-right-2"
+            onClick={() => setCurrent(current - 1)}
+          >
+            {tc('back')}
+          </button>
+        )}
+        {current < GUIDE_STEPS.length - 1 && (
+          <button
+            type="button"
+            className="govuk-button"
+            data-test="guide-next"
+            onClick={() => setCurrent(current + 1)}
+          >
+            {t('guideNext')}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // English users get the XML directly instead of the Slovak-only Návody.Digital guide
 const DownloadXml = ({ taxForm, canContinue }) => {
   const t = useTranslations('Continue')
@@ -110,6 +206,19 @@ const DownloadXml = ({ taxForm, canContinue }) => {
         {t('downloadXml')}
       </button>
       <div className="govuk-inset-text">{t('slovakVersionNote')}</div>
+
+      <h2 className="govuk-heading-m">{t('guideHeading')}</h2>
+      <p>{t('guideIntro')}</p>
+      <SubmissionGuide />
+      <p>
+        {t.rich('guideSource', {
+          link: (chunks) => (
+            <ExternalLink href="https://navody.digital/zivotne-situacie/elektronicke-podanie-danoveho-priznania-2025">
+              {chunks}
+            </ExternalLink>
+          ),
+        })}
+      </p>
     </>
   )
 }
