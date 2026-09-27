@@ -1,6 +1,12 @@
 import React from 'react'
+import { Page } from '../components/Page'
+import { TaxFormUserInput } from '../types/TaxFormUserInput'
+import { debugTestData } from '../lib/debugTestData'
 
-export default function DebugPage() {
+const DebugPage: Page<Partial<TaxFormUserInput>> = ({
+  setTaxFormUserInput,
+  router,
+}) => {
   return (
     <>
       <h1 className="govuk-heading-l govuk-!-margin-top-3">Debug stránka</h1>
@@ -23,6 +29,19 @@ export default function DebugPage() {
       >
         Vypnúť DEBUG mode
       </button>
+      <br />
+      <button
+        className="govuk-button btn-secondary"
+        data-test="fill-test-data"
+        onClick={() => {
+          setTaxFormUserInput(debugTestData)
+          router.push('/suhrn')
+        }}
+      >
+        Vyplniť testovacie údaje (test data)
+      </button>
     </>
   )
 }
+
+export default DebugPage
