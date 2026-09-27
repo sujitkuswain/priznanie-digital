@@ -93,9 +93,10 @@ const GUIDE_STEPS = [
   'verify',
 ] as const
 
-const externalLink = (href: string) => (chunks) => (
-  <ExternalLink href={href}>{chunks}</ExternalLink>
-)
+const externalLink = (href: string) =>
+  function GuideLink(chunks) {
+    return <ExternalLink href={href}>{chunks}</ExternalLink>
+  }
 
 // tags used in the guide texts: <b> for portal button labels, links to external services
 const richTags = {
