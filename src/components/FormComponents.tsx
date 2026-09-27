@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import {
   Formik,
   FormikProps,
   useField,
   FormikConfig,
   FormikValues,
+  useFormikContext,
 } from 'formik'
 import classnames from 'classnames'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { UserInput } from '../types/UserInput'
 import { numberInputRegexp } from '../lib/utils'
 
@@ -39,6 +40,30 @@ export type FormWrapperProps<FormikInput> = FormikConfig<FormikInput> & {
   children: (formikProps: FormikProps<FormikInput>) => ReactNode
 }
 
+// Error messages are stored already translated, so re-validate visible errors
+// when the language changes. Calls validate directly to avoid moving focus.
+const RevalidateOnLocaleChange = <FormikInput extends FormikValues>({
+  validate,
+}: {
+  validate?: FormikConfig<FormikInput>['validate']
+}) => {
+  const locale = useLocale()
+  const previousLocale = useRef(locale)
+  const { values, errors, setErrors } = useFormikContext<FormikInput>()
+
+  useEffect(() => {
+    if (previousLocale.current === locale) return
+    previousLocale.current = locale
+    if (validate && Object.keys(errors).length > 0) {
+      Promise.resolve(validate(values)).then((newErrors) =>
+        setErrors(newErrors || {}),
+      )
+    }
+  }, [locale])
+
+  return null
+}
+
 export const FormWrapper = <FormikInput extends FormikValues>({
   children,
   ...formikProps
@@ -60,7 +85,12 @@ export const FormWrapper = <FormikInput extends FormikValues>({
       {...formikProps}
       validate={validate}
     >
-      {children}
+      {(formik) => (
+        <>
+          <RevalidateOnLocaleChange validate={formikProps.validate} />
+          {children(formik)}
+        </>
+      )}
     </Formik>
   )
 }
