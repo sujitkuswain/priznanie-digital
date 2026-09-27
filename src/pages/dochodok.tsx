@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Form } from 'formik'
 import { FormWrapper, Input } from '../components/FormComponents'
 import { FormErrors, PensionUserInput } from '../types/PageUserInputs'
@@ -13,6 +14,7 @@ import Fieldset from '../components/fieldset/Fieldset'
 import RadioGroup from '../components/radio/RadioGroup'
 import Radio from '../components/radio/Radio'
 import RadioConditional from '../components/radio/RadioConditional'
+import { Translate, translateKey } from '../lib/i18n'
 
 const Dochodok: Page<PensionUserInput> = ({
   setTaxFormUserInput,
@@ -21,14 +23,16 @@ const Dochodok: Page<PensionUserInput> = ({
   previousRoute,
   nextRoute,
 }) => {
+  const t = useTranslations('Pension')
+  const tc = useTranslations('Common')
   return (
     <>
       <Link href={previousRoute} data-test="back" className="govuk-back-link">
-        Späť
+        {tc('back')}
       </Link>
       <FormWrapper<PensionUserInput>
         initialValues={taxFormUserInput}
-        validate={validate}
+        validate={(values) => validate(values, t)}
         onSubmit={(values) => {
           const userInput = values.platil_prispevky_na_dochodok
             ? values
@@ -44,7 +48,7 @@ const Dochodok: Page<PensionUserInput> = ({
           <Form className="form" noValidate>
             <ErrorSummary<PensionUserInput> errors={errors} />
             <Fieldset
-              title={`Platili ste v roku ${TAX_YEAR} príspevky na doplnkové dôchodkové poistenie (III. pilier)?`}
+              title={t('question', { year: TAX_YEAR })}
               error={errors.platil_prispevky_na_dochodok}
             >
               <RadioGroup
@@ -58,46 +62,37 @@ const Dochodok: Page<PensionUserInput> = ({
               >
                 <Radio
                   name="platil_prispevky_na_dochodok-input-yes"
-                  label="Áno"
+                  label={tc('yes')}
                   value="true"
                 />
                 <RadioConditional forValue="true">
                   <Input
                     name="zaplatene_prispevky_na_dochodok"
                     type="number"
-                    label={`Výška zaplatených príspevkov za rok ${TAX_YEAR}`}
-                    hint="Maximálne si môžete uplatniť príspevky na doplnkové dôchodkové sporenie do výšky 180 eur."
+                    label={t('amountLabel', { year: TAX_YEAR })}
+                    hint={t('amountHint')}
                   />
                 </RadioConditional>
 
                 <Radio
                   name="platil_prispevky_na_dochodok-input-no"
-                  label="Nie"
+                  label={tc('no')}
                   value="false"
                 />
               </RadioGroup>
             </Fieldset>
-            <Details
-              title={
-                'Kedy si môžete uplatniť daňové zvýhodnenie za III. pilier:'
-              }
-            >
+            <Details title={t('conditionsTitle')}>
               <ul>
                 <li>
-                  príspevky na III. pilier ste zaplatili na základe účastníckej{' '}
-                  <strong>zmluvy uzatvorenej po 31.12.2013</strong>, alebo na
-                  základe zmeny účastníckej zmluvy, ktorej súčasťou je zrušenie
-                  dávkového plánu
+                  {t.rich('condition1', {
+                    strong: (chunks) => <strong>{chunks}</strong>,
+                  })}
                 </li>
-                <li>
-                  nemáte uzatvorenú inú účastnícku zmluvu podľa zákona o
-                  doplnkovom dôchodkovom sporení, ktorá nespĺňa podmienky
-                  stanovené novelou zákona o doplnkovom dôchodkovom sporení
-                </li>
+                <li>{t('condition2')}</li>
               </ul>
             </Details>
             <button data-test="next" className="govuk-button" type="submit">
-              Pokračovať
+              {tc('continue')}
             </button>
           </Form>
         )}
@@ -106,25 +101,25 @@ const Dochodok: Page<PensionUserInput> = ({
   )
 }
 
-export const validate = (values: PensionUserInput) => {
+export const validate = (
+  values: PensionUserInput,
+  t: Translate = translateKey,
+) => {
   const errors: Partial<FormErrors<PensionUserInput>> = {}
 
   if (typeof values.platil_prispevky_na_dochodok === 'undefined') {
-    errors.platil_prispevky_na_dochodok = 'Vyznačte odpoveď'
+    errors.platil_prispevky_na_dochodok = t('errorSelectAnswer')
   }
 
   if (values.platil_prispevky_na_dochodok) {
     if (!values.zaplatene_prispevky_na_dochodok) {
-      errors.zaplatene_prispevky_na_dochodok =
-        'Zadajte výšku zaplatených príspevkov'
+      errors.zaplatene_prispevky_na_dochodok = t('errorAmount')
     } else if (
       !values.zaplatene_prispevky_na_dochodok.match(numberInputRegexp)
     ) {
-      errors.zaplatene_prispevky_na_dochodok =
-        'Zadajte výšku príspevkov vo formáte 123,45'
+      errors.zaplatene_prispevky_na_dochodok = t('errorAmountFormat')
     } else if (parseInputNumber(values.zaplatene_prispevky_na_dochodok) > 180) {
-      errors.zaplatene_prispevky_na_dochodok =
-        'Výška príspevkov nesmie presiahnuť 180,00 eur'
+      errors.zaplatene_prispevky_na_dochodok = t('errorAmountMax')
     }
   }
 

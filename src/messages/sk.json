@@ -259,5 +259,17 @@
     "errorIncome": "Zadajte vlastné príjmy manželky / manžela",
     "errorIncomeFormat": "Zadajte príjmy vo formáte 123,45",
     "errorIncomePositive": "Príjem musí byť viac ako 0"
+  },
+  "Pension": {
+    "question": "Platili ste v roku {year} príspevky na doplnkové dôchodkové poistenie (III. pilier)?",
+    "amountLabel": "Výška zaplatených príspevkov za rok {year}",
+    "amountHint": "Maximálne si môžete uplatniť príspevky na doplnkové dôchodkové sporenie do výšky 180 eur.",
+    "conditionsTitle": "Kedy si môžete uplatniť daňové zvýhodnenie za III. pilier:",
+    "condition1": "príspevky na III. pilier ste zaplatili na základe účastníckej <strong>zmluvy uzatvorenej po 31.12.2013</strong>, alebo na základe zmeny účastníckej zmluvy, ktorej súčasťou je zrušenie dávkového plánu",
+    "condition2": "nemáte uzatvorenú inú účastnícku zmluvu podľa zákona o doplnkovom dôchodkovom sporení, ktorá nespĺňa podmienky stanovené novelou zákona o doplnkovom dôchodkovom sporení",
+    "errorSelectAnswer": "Vyznačte odpoveď",
+    "errorAmount": "Zadajte výšku zaplatených príspevkov",
+    "errorAmountFormat": "Zadajte výšku príspevkov vo formáte 123,45",
+    "errorAmountMax": "Výška príspevkov nesmie presiahnuť 180,00 eur"
   }
 }
