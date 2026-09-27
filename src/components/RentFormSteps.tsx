@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { BooleanRadio, Input } from './FormComponents'
 import { Details } from './Details'
 import {
@@ -16,86 +17,84 @@ interface Props {
   disabled?: boolean
 }
 
-export const ApplyForBonusQuestion = ({ disabled = false }: Props) => (
-  <>
-    <BooleanRadio
-      title={`Prenajímali ste v roku ${TAX_YEAR} nehnuteľnosť?`}
-      name="rent"
-      hint="Nie na základe živnostenského oprávnenia, nezaradenú do obchodného majetku s výdavkami vedenými podľa daňovej evidencie "
-      disabled={disabled}
-    />
-  </>
-)
-
-export const IncomeQuestion = ({ disabled }) => {
+export const ApplyForBonusQuestion = ({ disabled = false }: Props) => {
+  const t = useTranslations('Rent')
   return (
     <>
-      <Input
-        name="vyskaPrijmovZPrenajmu"
-        type="number"
-        label={`Výška príjmov z prenájmu nehnuteľností dosiahnutá v roku ${TAX_YEAR}.`}
+      <BooleanRadio
+        title={t('question', { year: TAX_YEAR })}
+        name="rent"
+        hint={t('questionHint')}
         disabled={disabled}
       />
     </>
   )
 }
 
-export const OslobodenieQuestion = ({ disabled }) => (
-  <>
-    <BooleanRadio
-      name="prenajomPrijemZPrilezitostnejCinnosti"
-      title={`Dosiahli ste v roku ${TAX_YEAR} aj príjem z príležitostnej činnosti?`}
-      disabled={disabled}
-    />
-    <p className="govuk-hint">
-      Od dane z príjmov sú oslobodené:
-      <ul>
-        <li>príjmy z prenájmu nehnuteľností a</li>
-        <li>príjmy z príležitostnej činnosti</li>
-      </ul>
-      ak úhrn týchto príjmov nepresiahne v zdaňovacom období{' '}
-      {formatCurrency(OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI)}, pričom ak takto
-      vymedzené príjmy presiahnu túto sumu, do základu dane sa zahrnú len príjmy
-      nad sumu {formatCurrency(OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI)}. Detailné
-      informácie nájdete na stránke{' '}
-      <ExternalLink href="https://podpora.financnasprava.sk/186937-Oslobodenie-pr%C3%ADjmov-z-pr%C3%ADle%C5%BEitostn%C3%BDch-%C4%8Dinnost%C3%AD">
-        Finančnej správy SR
-      </ExternalLink>
-      .
-    </p>
-    <Details title="Čo je príjem z príležitostnej činnosti?">
-      <>
-        <p>
-          Príjmom z príležitostnej činnosti je iba taký príjem, ktorý plynie
-          fyzickej osobe bez zmluvne dohodnutých podmienok. Príležitostný príjem
-          je zárobok, ktorý je občasný, je nepravidelný, to ale neznamená, že
-          musí ísť o jednorazový príjem. Detailné informácie nájdete na stránke{' '}
-          <ExternalLink href="https://podpora.financnasprava.sk/531581-Pr%C3%ADjmy-z-pr%C3%ADle%C5%BEitostn%C3%BDch-%C4%8Dinnost%C3%AD">
-            Finančnej správy SR
-          </ExternalLink>
-          .
-        </p>
+export const IncomeQuestion = ({ disabled }) => {
+  const t = useTranslations('Rent')
+  return (
+    <>
+      <Input
+        name="vyskaPrijmovZPrenajmu"
+        type="number"
+        label={t('incomeLabel', { year: TAX_YEAR })}
+        disabled={disabled}
+      />
+    </>
+  )
+}
+
+export const OslobodenieQuestion = ({ disabled }) => {
+  const t = useTranslations('Rent')
+  const exemption = formatCurrency(OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI)
+  return (
+    <>
+      <BooleanRadio
+        name="prenajomPrijemZPrilezitostnejCinnosti"
+        title={t('occasionalQuestion', { year: TAX_YEAR })}
+        disabled={disabled}
+      />
+      <p className="govuk-hint">
+        {t('exemptIntro')}
         <ul>
-          <li>pokosenie trávy susedovi</li>
-          <li>prenájom automobilu</li>
-          <li>príjem z prenájmu hnuteľných vecí</li>
-          <li>
-            predaj poľnohospodárskych produktov dopestovaných vo vlastnej
-            záhrade napr. zelenina, ovocie,...
-          </li>
-          <li>...</li>
+          <li>{t('exemptRent')}</li>
+          <li>{t('exemptOccasional')}</li>
         </ul>
-      </>
-    </Details>
-    <Warning>
-      Príjem z príležitostnej činnosti nad{' '}
-      {formatCurrency(OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI)} momentálne nie je
-      podporovaný.
-    </Warning>
-  </>
-)
+        {t.rich('exemptRule', {
+          amount: exemption,
+          link: (chunks) => (
+            <ExternalLink href="https://podpora.financnasprava.sk/186937-Oslobodenie-pr%C3%ADjmov-z-pr%C3%ADle%C5%BEitostn%C3%BDch-%C4%8Dinnost%C3%AD">
+              {chunks}
+            </ExternalLink>
+          ),
+        })}
+      </p>
+      <Details title={t('occasionalTitle')}>
+        <>
+          <p>
+            {t.rich('occasionalText', {
+              link: (chunks) => (
+                <ExternalLink href="https://podpora.financnasprava.sk/531581-Pr%C3%ADjmy-z-pr%C3%ADle%C5%BEitostn%C3%BDch-%C4%8Dinnost%C3%AD">
+                  {chunks}
+                </ExternalLink>
+              ),
+            })}
+          </p>
+          <ul>
+            {(t.raw('occasionalExamples') as string[]).map((example) => (
+              <li key={example}>{example}</li>
+            ))}
+          </ul>
+        </>
+      </Details>
+      <Warning>{t('occasionalUnsupported', { amount: exemption })}</Warning>
+    </>
+  )
+}
 
 export const OslobodenieVyskaQuestion = ({ disabled }) => {
+  const t = useTranslations('Rent')
   const { values } = useFormikContext<RentUserInput>()
   const {
     prenajomPrijemZPrilezitostnejCinnosti,
@@ -112,20 +111,17 @@ export const OslobodenieVyskaQuestion = ({ disabled }) => {
       0,
     )
   }
+  const exemption = formatCurrency(OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI)
   const hint =
     prenajomPrijemZPrilezitostnejCinnosti === true
-      ? `Na príjem z prenájmu už môžete využiť iba zvyšok oslobodenia po odpočítani príjmu z príležitostnej činnosti. Teda ${formatCurrency(
-          OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI,
-        )} mínus príjem z príležitostnej činnosti.`
-      : `Keďže ste nemali príjem z príležitostnej činnosti, môžete si uplatniť oslobodenie v maximálnej výške ${formatCurrency(
-          OSLOBODENIE_PRENAJOM_A_PRILZ_CINNOSTI,
-        )}.`
+      ? t('exemptionHintWithOccasional', { amount: exemption })
+      : t('exemptionHintWithoutOccasional', { amount: exemption })
   return (
     <>
       <Input
         name="vyskaOslobodenia"
         type="number"
-        label="Akú výšku oslobodenia od dane si uplatňujete na príjem z prenájmu?"
+        label={t('exemptionLabel')}
         hint={hint}
         disabled={disabled}
         min={1}
@@ -133,80 +129,64 @@ export const OslobodenieVyskaQuestion = ({ disabled }) => {
       />
       {priznanyPrijem && (
         <p>
-          Váš priznaný príjem z prenájmu nehnuteľností bude{' '}
-          {formatCurrency(priznanyPrijem.toNumber())}.
+          {t('declaredIncome', {
+            amount: formatCurrency(priznanyPrijem.toNumber()),
+          })}
         </p>
       )}
     </>
   )
 }
 
-export const VydavkyQuestion = ({ disabled }) => (
-  <>
-    <Input
-      name="vydavkyZPrenajmu"
-      type="number"
-      label={`Výška preukázateľných výdavkov spojených s príjmami z prenájmu nehnuteľností v roku ${TAX_YEAR}`}
-      disabled={disabled}
-      min={1}
-      max={500}
-    />
-    <Details title="Čo sú preukázateľné výdavky">
-      <>
-        <p>
-          V prípade nehnuteľnosti nezaradenej v obchodnom majetku je možné
-          uplatniť nasledovné preukázateľné výdavky:
-        </p>
-        <ol>
-          <li>
-            Výdavky za spotrebu energií (vody, plynu, tepla, elektrickej
-            energie)
-          </li>
-          <li>Zaplatené preddavky do fondu prevádzky, opráv a údržby;</li>
-          <li>Výdavky za služby v prenajatej nehnuteľnosti, ako napr:</li>
-          <ul>
-            <li>
-              odvádzane odpadovej vody z domácností, osvetlenie spoločných
-              priestorov bytového domu
-            </li>
-            <li>
-              používanie a servis výťahu, používanie domovej práčovne, kontrola
-              a čistenie komínov, čistenie žúmp
-            </li>
-            <li>poplatky za TV a rozhlas vrátane koncesionárskych poplatkov</li>
-            <li>poplatky za pripojenie na internet</li>
-            <li>
-              poplatky za povinnú správu bytového domu, službu vrátnika,
-              recepcie, výdavky na strážnu službu, upratovanie spoločných
-              priestorov bytového domu
-            </li>
-            <li>
-              výdavky za odvoz smetí, okrem miestneho poplatku za odvoz
-              komunálneho odpadu
-            </li>
-            <li>
-              úhrady vlastníka bytu a nebytového priestoru za výkon činnosti
-              zástupcu vlastníkov bytov a nebytových priestorov
-            </li>
-          </ul>
-        </ol>
-      </>
-    </Details>
-  </>
-)
+export const VydavkyQuestion = ({ disabled }) => {
+  const t = useTranslations('Rent')
+  return (
+    <>
+      <Input
+        name="vydavkyZPrenajmu"
+        type="number"
+        label={t('expensesLabel', { year: TAX_YEAR })}
+        disabled={disabled}
+        min={1}
+        max={500}
+      />
+      <Details title={t('expensesTitle')}>
+        <>
+          <p>{t('expensesIntro')}</p>
+          <ol>
+            <li>{t('expensesEnergy')}</li>
+            <li>{t('expensesFund')}</li>
+            <li>{t('expensesServices')}</li>
+            <ul>
+              {(t.raw('expensesServiceExamples') as string[]).map((example) => (
+                <li key={example}>{example}</li>
+              ))}
+            </ul>
+          </ol>
+        </>
+      </Details>
+    </>
+  )
+}
 
-export const PreviousButton = ({ onClick }) => (
-  <button
-    className="govuk-button btn-secondary"
-    type="button"
-    onClick={onClick}
-  >
-    Späť
-  </button>
-)
+export const PreviousButton = ({ onClick }) => {
+  const t = useTranslations('Common')
+  return (
+    <button
+      className="govuk-button btn-secondary"
+      type="button"
+      onClick={onClick}
+    >
+      {t('back')}
+    </button>
+  )
+}
 
-export const SubmitButton = () => (
-  <button className="govuk-button" type="submit">
-    Pokračovať
-  </button>
-)
+export const SubmitButton = () => {
+  const t = useTranslations('Common')
+  return (
+    <button className="govuk-button" type="submit">
+      {t('continue')}
+    </button>
+  )
+}

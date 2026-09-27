@@ -271,5 +271,47 @@
     "errorAmount": "Enter the amount of contributions paid",
     "errorAmountFormat": "Enter the contributions in the format 123,45",
     "errorAmountMax": "Contributions cannot exceed 180,00 EUR"
+  },
+  "Rent": {
+    "question": "Did you rent out property in {year}?",
+    "questionHint": "Not under a trade licence, and not included in business assets with expenses kept in tax records.",
+    "incomeLabel": "Income from renting out property in {year}.",
+    "occasionalQuestion": "Did you also have income from occasional activities in {year}?",
+    "exemptIntro": "The following are exempt from income tax:",
+    "exemptRent": "income from renting out property and",
+    "exemptOccasional": "income from occasional activities",
+    "exemptRule": "if their total does not exceed {amount} in the tax year. If this income exceeds that amount, only the income above {amount} is included in the tax base. More information is available on the <link>Financial Administration website</link>.",
+    "occasionalTitle": "What is income from occasional activities?",
+    "occasionalText": "Income from occasional activities is only income received by an individual without contractually agreed terms. It is earned occasionally and irregularly, but it does not have to be a one-off payment. More information is available on the <link>Financial Administration website</link>.",
+    "occasionalExamples": [
+      "mowing a neighbour's lawn",
+      "renting out a car",
+      "income from renting out movable items",
+      "selling produce grown in your own garden, e.g. vegetables, fruit,...",
+      "..."
+    ],
+    "occasionalUnsupported": "Income from occasional activities above {amount} is currently not supported.",
+    "exemptionHintWithOccasional": "For rental income, you can only use the rest of the exemption after deducting income from occasional activities, i.e. {amount} minus income from occasional activities.",
+    "exemptionHintWithoutOccasional": "Since you had no income from occasional activities, you can claim the exemption up to {amount}.",
+    "exemptionLabel": "How much tax exemption are you claiming on your rental income?",
+    "declaredIncome": "Your declared income from renting out property will be {amount}.",
+    "expensesLabel": "Provable expenses related to rental income in {year}",
+    "expensesTitle": "What are provable expenses",
+    "expensesIntro": "For property not included in business assets, you can claim the following provable expenses:",
+    "expensesEnergy": "Energy costs (water, gas, heating, electricity)",
+    "expensesFund": "Advance payments to the building operation, repair and maintenance fund;",
+    "expensesServices": "Costs of services in the rented property, for example:",
+    "expensesServiceExamples": [
+      "household waste water disposal, lighting of shared areas of the apartment building",
+      "use and servicing of the lift, use of the shared laundry, chimney inspection and cleaning, cesspit cleaning",
+      "TV and radio fees, including licence fees",
+      "internet connection fees",
+      "fees for mandatory building management, doorman and reception services, security services, cleaning of shared areas",
+      "waste collection costs, except the local municipal waste fee",
+      "payments by the apartment or non-residential space owner for the owners' representative"
+    ],
+    "errorSelectAnswer": "Select an answer",
+    "errorNumber": "Enter an amount (number)",
+    "errorExemptionRange": "Enter an amount, a number from 0 to 500"
   }
 }

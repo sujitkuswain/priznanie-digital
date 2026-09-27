@@ -271,5 +271,47 @@
     "errorAmount": "Zadajte výšku zaplatených príspevkov",
     "errorAmountFormat": "Zadajte výšku príspevkov vo formáte 123,45",
     "errorAmountMax": "Výška príspevkov nesmie presiahnuť 180,00 eur"
+  },
+  "Rent": {
+    "question": "Prenajímali ste v roku {year} nehnuteľnosť?",
+    "questionHint": "Nie na základe živnostenského oprávnenia, nezaradenú do obchodného majetku s výdavkami vedenými podľa daňovej evidencie ",
+    "incomeLabel": "Výška príjmov z prenájmu nehnuteľností dosiahnutá v roku {year}.",
+    "occasionalQuestion": "Dosiahli ste v roku {year} aj príjem z príležitostnej činnosti?",
+    "exemptIntro": "Od dane z príjmov sú oslobodené:",
+    "exemptRent": "príjmy z prenájmu nehnuteľností a",
+    "exemptOccasional": "príjmy z príležitostnej činnosti",
+    "exemptRule": "ak úhrn týchto príjmov nepresiahne v zdaňovacom období {amount}, pričom ak takto vymedzené príjmy presiahnu túto sumu, do základu dane sa zahrnú len príjmy nad sumu {amount}. Detailné informácie nájdete na stránke <link>Finančnej správy SR</link>.",
+    "occasionalTitle": "Čo je príjem z príležitostnej činnosti?",
+    "occasionalText": "Príjmom z príležitostnej činnosti je iba taký príjem, ktorý plynie fyzickej osobe bez zmluvne dohodnutých podmienok. Príležitostný príjem je zárobok, ktorý je občasný, je nepravidelný, to ale neznamená, že musí ísť o jednorazový príjem. Detailné informácie nájdete na stránke <link>Finančnej správy SR</link>.",
+    "occasionalExamples": [
+      "pokosenie trávy susedovi",
+      "prenájom automobilu",
+      "príjem z prenájmu hnuteľných vecí",
+      "predaj poľnohospodárskych produktov dopestovaných vo vlastnej záhrade napr. zelenina, ovocie,...",
+      "..."
+    ],
+    "occasionalUnsupported": "Príjem z príležitostnej činnosti nad {amount} momentálne nie je podporovaný.",
+    "exemptionHintWithOccasional": "Na príjem z prenájmu už môžete využiť iba zvyšok oslobodenia po odpočítani príjmu z príležitostnej činnosti. Teda {amount} mínus príjem z príležitostnej činnosti.",
+    "exemptionHintWithoutOccasional": "Keďže ste nemali príjem z príležitostnej činnosti, môžete si uplatniť oslobodenie v maximálnej výške {amount}.",
+    "exemptionLabel": "Akú výšku oslobodenia od dane si uplatňujete na príjem z prenájmu?",
+    "declaredIncome": "Váš priznaný príjem z prenájmu nehnuteľností bude {amount}.",
+    "expensesLabel": "Výška preukázateľných výdavkov spojených s príjmami z prenájmu nehnuteľností v roku {year}",
+    "expensesTitle": "Čo sú preukázateľné výdavky",
+    "expensesIntro": "V prípade nehnuteľnosti nezaradenej v obchodnom majetku je možné uplatniť nasledovné preukázateľné výdavky:",
+    "expensesEnergy": "Výdavky za spotrebu energií (vody, plynu, tepla, elektrickej energie)",
+    "expensesFund": "Zaplatené preddavky do fondu prevádzky, opráv a údržby;",
+    "expensesServices": "Výdavky za služby v prenajatej nehnuteľnosti, ako napr:",
+    "expensesServiceExamples": [
+      "odvádzane odpadovej vody z domácností, osvetlenie spoločných priestorov bytového domu",
+      "používanie a servis výťahu, používanie domovej práčovne, kontrola a čistenie komínov, čistenie žúmp",
+      "poplatky za TV a rozhlas vrátane koncesionárskych poplatkov",
+      "poplatky za pripojenie na internet",
+      "poplatky za povinnú správu bytového domu, službu vrátnika, recepcie, výdavky na strážnu službu, upratovanie spoločných priestorov bytového domu",
+      "výdavky za odvoz smetí, okrem miestneho poplatku za odvoz komunálneho odpadu",
+      "úhrady vlastníka bytu a nebytového priestoru za výkon činnosti zástupcu vlastníkov bytov a nebytových priestorov"
+    ],
+    "errorSelectAnswer": "Vyznačte odpoveď",
+    "errorNumber": "Zadajte sumu - číslo",
+    "errorExemptionRange": "Zadajte sumu - číslo od 0 do 500"
   }
 }
